@@ -1,9 +1,11 @@
-import { DataTypes } from 'sequelize';
+import { Model, DataTypes } from 'sequelize';
 
-import { db } from '../config/db.js';
+import { db } from '../config/db.config.js';
 
-import { Attachment } from './attachment.js';
-import { Version } from './version.js';
+import { Attachment } from './attachment.model.js';
+import { Version } from './version.model.js';
+
+class Note extends Model {};
 
 Note.init(
   {
