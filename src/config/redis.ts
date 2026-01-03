@@ -8,7 +8,7 @@ const cache: RedisClientType = createClient({
 });
 
 cache.on('error', err => {
-  console.log(`Redis: ${err}`);
+  console.log('Redis Client Error', err);
 });
 
 export { cache };
