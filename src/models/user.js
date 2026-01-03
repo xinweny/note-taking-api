@@ -6,6 +6,11 @@ import { Note } from './note.js';
 import { Editor } from './editor.js';
 
 const User = db.define('User', {
+  id: {
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
+    primaryKey: true,
+  },
   email: {
     type: DataTypes.STRING,
     allowNull: false,
@@ -18,7 +23,6 @@ const User = db.define('User', {
     allowNull: false,
     unique: true,
   },
-  createdAt: { type: DataTypes.DATE, allowNull: false },
 });
 
 User.hasMany(Note);

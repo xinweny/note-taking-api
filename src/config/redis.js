@@ -1,9 +1,6 @@
-import {
-  createClient,
-  type RedisClientType,
-} from 'redis';
+import { createClient } from 'redis';
 
-const cache: RedisClientType = createClient({
+const cache = createClient({
   url: process.env.REDIS_URL || 'redis://localhost:6379',
 });
 
