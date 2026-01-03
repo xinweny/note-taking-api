@@ -4,21 +4,27 @@ import { User } from '../models/user.model';
 import { Editor } from '../models/editor.model';
 
 async function authenticate(req, res, next) {
-  if (!req.headers.authorization) return res.status(401).json('Unauthorized');
+  if (!req.headers.authorization) return res.status(401).json({ message: 'Unauthorized' });
 
   const accessToken = req.headers.authorization.split(' ')[1];
 
-  if (!accessToken) return res.status(401).json('Unauthorized');
+  if (!accessToken) return res.status(401).json({ message: 'Unauthorized' });
 
-  const payload = jwt.verify(accessToken, process.env.JWT_ACCESS_TOKEN_SECRET);
+  jwt.verify(
+    accessToken,
+    process.env.JWT_ACCESS_TOKEN_SECRET,
+    async (err, payload) => {
+      if (err) return res.status(401).json({ message: 'Unauthorized' });
 
-  const user = payload && await User.findByPk(payload.id);
+      const user = payload && await User.findByPk(payload.id);
 
-  if (!user) return res.status(401).json('Unauthorized');
+      if (!user) return res.status(401).json({ message: 'Unauthorized' });
 
-  req.user = user;
+      req.user = user;
 
-  next();
+      next();
+    }
+  );
 }
 
 async function authorize(req, res, next) {
@@ -39,7 +45,7 @@ async function authorize(req, res, next) {
     case 'POST':
       if (editor?.canEdit) break; // Edit allowed if user is an editor of the note and has canEdit permission
     default:
-      return res.status(403).json('Forbidden');
+      return res.status(403).json({ message: 'Forbidden' });
   }
 
   next();
