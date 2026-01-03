@@ -8,7 +8,7 @@ ENV NODE_ENV development
 WORKDIR /app
 
 # Copy project files
-COPY . .
+COPY . /app
 
 # Install dependencies
 RUN npm install
