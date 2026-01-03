@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 
-function generateAccessToken(id) {
+function generateAccessToken(id: string) {
   return jwt.sign(
     { id },
     process.env.JWT_ACCESS_TOKEN_SECRET,

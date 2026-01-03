@@ -1,9 +1,9 @@
 import { Model, DataTypes } from 'sequelize';
 
-import { db } from '../config/db.config.js';
+import { db } from '../config/db.config.ts';
 
-import { Note } from './note.model.js';
-import { Editor } from './editor.model.js';
+import { Note } from './note.model.ts';
+import { Editor } from './editor.model.ts';
 
 class User extends Model {}
 

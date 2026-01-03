@@ -1,14 +1,16 @@
+import { type Request, type Response } from 'express';
+
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
-import { User } from '../models/user.model.js';
+import { User } from '../models/user.model.ts';
 
 import {
   generateAccessToken,
   generateRefreshToken,
-} from '../utils/auth.util.js';
+} from '../utils/auth.util.ts';
 
-async function createUser(res, req) {
+async function createUser(req: Request, res: Response) {
   const {
     username,
     email,
@@ -29,7 +31,7 @@ async function createUser(res, req) {
   });
 }
 
-async function loginUser(res, req) {
+async function loginUser(req: Request, res: Response) {
   const { email, password } = req.body;
 
   const user = await User.findOne({
@@ -58,7 +60,7 @@ async function loginUser(res, req) {
   return res.status(200).json({ data: { accessToken } });
 };
 
-function refreshAccessToken(req, res) {
+function refreshAccessToken(req: Request, res: Response) {
   const refreshToken = req.cookies?.jwt;
 
   if (!refreshToken) return res.status(401).json({ message: 'Unauthorized' });

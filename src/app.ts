@@ -1,7 +1,9 @@
-import cookieParser from 'cookie-parser';
 import express from 'express';
+import 'dotenv/config';
+import cookieParser from 'cookie-parser';
 
-import { authRouter } from './routes/auth.route.js';
+
+import { authRouter } from './routes/auth.route.ts';
 
 const app = express();
 

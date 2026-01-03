@@ -5,3 +5,4 @@ build
 *.md
 .gitignore
 eslint.config.js
+dist

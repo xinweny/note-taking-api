@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 
-import { User } from '../models/user.model';
-import { Editor } from '../models/editor.model';
+import { User } from '../models/user.model.ts';
+import { Editor } from '../models/editor.model.ts';
 
 async function authenticate(req, res, next) {
   if (!req.headers.authorization) return res.status(401).json({ message: 'Unauthorized' });

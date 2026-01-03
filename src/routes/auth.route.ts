@@ -4,7 +4,7 @@ import {
   createUser,
   loginUser,
   refreshAccessToken,
-} from '../controllers/auth.controller.js';
+} from '../controllers/auth.controller.ts';
 
 const authRouter = Router();
 
