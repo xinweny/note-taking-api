@@ -1,5 +1,5 @@
 # Fetch minified node image on alpine linux
-FROM node:22.10.0-alpine.3.19
+FROM node:22-alpine
 
 # Set env
 ENV NODE_ENV development
