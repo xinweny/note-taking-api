@@ -8,4 +8,6 @@ app.use(express.urlencoded({ extended: true })); // Use qs library when true; Us
 
 app.use(cookieParser());
 
+app.get('/', (req, res) => res.send('Note Taking API'));
+
 export { app };
