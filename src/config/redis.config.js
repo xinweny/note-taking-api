@@ -1,7 +1,8 @@
 import { createClient } from 'redis';
 
 const cache = createClient({
-  url: process.env.REDIS_URL || 'redis://localhost:6379',
+  url: process.env.REDIS_URL,
+  password: process.env.REDIS_PASSWORD,
 });
 
 cache.on('error', err => {
