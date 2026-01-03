@@ -27,7 +27,8 @@ User.init(
       unique: true,
     },
   },
-  { sequelize: db,
+  {
+    sequelize: db,
     modelName: 'user',
   }
 );

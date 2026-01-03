@@ -1,6 +1,3 @@
-
-import { Op } from 'sequelize';
-
 import { User } from '../models/user.model';
 
 import {
@@ -12,7 +9,7 @@ async function loginUser(res, req) {
   const { email, password } = req.body;
 
   const user = await User.findOne({
-    where: { email: { [Op.eq]: email } },
+    where: { email },
   });
 
   const isPasswordMatch = user
@@ -23,8 +20,7 @@ async function loginUser(res, req) {
     message: 'User not found.',
   });
 
-  const accessToken = generateAccessToken({ userId: user.id, canEdit: false });
-
+  const accessToken = generateAccessToken(user.id);
   const refreshToken = generateRefreshToken(user.id);
 
   // Assign refresh token in http-only cookie
@@ -41,7 +37,7 @@ async function loginUser(res, req) {
 };
 
 async function refreshAccessToken(req, res) {
-  
+  if (req.cookies?.jwt)
 };
 
 export {
