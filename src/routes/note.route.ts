@@ -1,8 +1,9 @@
 import { Router } from 'express';
 
-import { permissionRouter } from './permission.route.ts';
-
 import { authorize } from '../middlewares/authorize.middleware.ts';
+
+import { permissionRouter } from './permission.route.ts';
+import { versionRouter } from './version.route.ts';
 
 import {
   createNote,
@@ -19,6 +20,7 @@ noteRouter.get('/', getAllNotes);
 noteRouter.post('/', createNote);
 
 noteRouter.use('/:noteId/permissions', permissionRouter);
+noteRouter.use('/:noteId/versions', versionRouter);
 
 noteRouter.use(authorize());
 noteRouter.get('/:noteId', getNoteById);
