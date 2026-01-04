@@ -26,7 +26,9 @@ export async function createUser(req: Request, res: Response) {
 
   await user.save();
 
-  return res.status(200);
+  return res.status(200).json({
+    message: 'User created successfully.',
+  });
 }
 
 export async function loginUser(req: Request, res: Response) {
@@ -64,12 +66,12 @@ export async function refreshAccessToken(req: Request, res: Response) {
   if (!refreshToken) return res.status(401).json({ message: 'Unauthorized' });
 
   try {
-      const payload = jwt.verify(refreshToken, process.env.JWT_REFRESH_TOKEN_SECRET) as JwtUserPayload;
+    const payload = jwt.verify(refreshToken, process.env.JWT_REFRESH_TOKEN_SECRET) as JwtUserPayload;
 
-      // Generate new access token
-      const accessToken = generateAccessToken(payload.id);
+    // Generate new access token
+    const accessToken = generateAccessToken(payload.id);
 
-      return res.status(200).json({ data: { accessToken } });
+    return res.status(200).json({ data: { accessToken } });
   } catch (err) {
     return res.status(401).json({ message: 'Unauthorized' });
   }
