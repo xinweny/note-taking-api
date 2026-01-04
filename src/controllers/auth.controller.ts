@@ -66,7 +66,7 @@ async function refreshAccessToken(req: Request, res: Response) {
   if (!refreshToken) return res.status(401).json({ message: 'Unauthorized' });
 
   try {
-      const payload = <JwtUserPayload>jwt.verify(refreshToken, process.env.JWT_REFRESH_TOKEN_SECRET);
+      const payload = jwt.verify(refreshToken, process.env.JWT_REFRESH_TOKEN_SECRET) as JwtUserPayload;
 
       // Generate new access token
       const accessToken = generateAccessToken(payload.id);

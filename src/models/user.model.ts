@@ -7,7 +7,7 @@ import {
   type CreationOptional,
 } from 'sequelize';
 
-import { db } from '../config/db.config.ts';
+import { sequelize } from '../config/db.config.ts';
 
 import { Note } from './note.model.ts';
 import { Editor } from './editor.model.ts';
@@ -24,9 +24,6 @@ export class User extends Model<
   declare notes?: NonAttribute<Note>;
   declare editors?: NonAttribute<Editor>;
 }
-
-User.hasMany(Note);
-User.hasMany(Editor);
 
 User.init(
   {
@@ -49,7 +46,10 @@ User.init(
     password: { type: DataTypes.STRING, allowNull: false },
   },
   {
-    sequelize: db,
+    sequelize,
     underscored: true,
   }
 );
+
+User.hasMany(Note, { foreignKey: 'userId' });
+User.hasMany(Editor, { foreignKey: 'userId' });

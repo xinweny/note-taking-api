@@ -12,7 +12,7 @@ async function authenticate(req: Request, res: Response, next: NextFunction) {
   if (!accessToken) return res.status(401).json({ message: 'Unauthorized' });
 
   try {
-      const payload = <JwtUserPayload>jwt.verify(accessToken, process.env.JWT_ACCESS_TOKEN_SECRET);
+      const payload = jwt.verify(accessToken, process.env.JWT_ACCESS_TOKEN_SECRET) as JwtUserPayload;
 
       const user = payload && await User.findByPk(payload.id);
 

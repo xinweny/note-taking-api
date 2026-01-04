@@ -7,7 +7,7 @@ import {
   type NonAttribute,
 } from 'sequelize';
 
-import { db } from '../config/db.config.ts';
+import { sequelize } from '../config/db.config.ts';
 
 import { Note } from './note.model.ts';
 
@@ -22,8 +22,6 @@ export class Version extends Model<
   declare note?: NonAttribute<Note>;
 }
 
-Version.belongsTo(Note)
-
 Version.init(
   {
     id: {
@@ -35,7 +33,7 @@ Version.init(
     createdAt: { type: DataTypes.DATE, allowNull: false },
   },
   {
-    sequelize: db,
+    sequelize,
     underscored: true,
   }
 );

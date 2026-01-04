@@ -6,7 +6,7 @@ import {
   type NonAttribute,
 } from 'sequelize';
 
-import { db } from '../config/db.config.ts';
+import { sequelize } from '../config/db.config.ts';
 
 import { Note } from './note.model.ts';
 
@@ -16,11 +16,9 @@ export class Attachment extends Model<
 > {
   declare id: number;
   declare url: string;
-  
+
   note?: NonAttribute<Note>;
 }
-
-Attachment.belongsTo(Note);
 
 Attachment.init(
   {
@@ -36,7 +34,7 @@ Attachment.init(
     },
   },
   {
-    sequelize: db,
+    sequelize,
     underscored: true,
   }
 );

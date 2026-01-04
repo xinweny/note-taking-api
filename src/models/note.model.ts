@@ -7,7 +7,7 @@ import {
   type CreationOptional,
 } from 'sequelize';
 
-import { db } from '../config/db.config.ts';
+import { sequelize } from '../config/db.config.ts';
 
 import { User } from './user.model.ts';
 import { Version } from './version.model.ts';
@@ -29,12 +29,6 @@ export class Note extends Model<
   declare attachments?: NonAttribute<Attachment[]>;
 }
 
-Note.belongsTo(User);
-
-Note.hasMany(Editor);
-Note.hasMany(Version);
-Note.hasMany(Attachment);
-
 Note.init(
   {
     id: {
@@ -47,8 +41,12 @@ Note.init(
     deletedAt: { type: DataTypes.DATE },
   },
   {
-    sequelize: db,
+    sequelize,
     paranoid: true, // Enables soft-deletion with deleteAt field
     underscored: true,
   }
 );
+
+Note.hasMany(Editor, { foreignKey: 'noteId' });
+Note.hasMany(Version, { foreignKey: 'noteId' });
+Note.hasMany(Attachment, { foreignKey: 'noteId' });

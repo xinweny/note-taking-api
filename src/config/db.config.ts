@@ -1,6 +1,6 @@
 import { Sequelize } from 'sequelize';
 
-const db = new Sequelize({
+const sequelize = new Sequelize({
   database: process.env.DATABASE_NAME,
   port: process.env.DATABASE_PORT,
   host: process.env.DATABASE_HOST,
@@ -9,4 +9,4 @@ const db = new Sequelize({
   dialect: 'mysql',
 });
 
-export { db };
+export { sequelize };
