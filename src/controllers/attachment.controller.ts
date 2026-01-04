@@ -52,6 +52,7 @@ export async function uploadAttachment(req: Request, res: Response) {
     });
   } catch (error) {
     console.error('Error uploading file:', error);
+    
     res.status(500).json({ message: 'File upload failed.' });
   }
 }
