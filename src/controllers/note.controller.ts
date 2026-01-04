@@ -4,7 +4,7 @@ import { Note, Permission } from '../models/index.ts';
 
 export async function createNote(req: Request, res: Response) {
   const note = await Note.build({
-    title: req.body.title,
+    name: req.body.name,
   }).save();
 
   await Permission.build({
@@ -16,5 +16,5 @@ export async function createNote(req: Request, res: Response) {
 }
 
 export async function getAllUserNotes(req: Request, res: Response) {
-  
+  const notes = 
 }

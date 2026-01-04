@@ -5,6 +5,7 @@ import {
   type InferCreationAttributes,
   type NonAttribute,
   type CreationOptional,
+  type ForeignKey,
 } from 'sequelize';
 
 import { sequelize } from '../config/db.config.ts';
@@ -18,7 +19,8 @@ export class Note extends Model<
   InferCreationAttributes<Note>
 > {
   declare id: CreationOptional<number>;
-  declare title: string;
+  declare name: string;
+  declare currentVersionId: CreationOptional<ForeignKey<Version['id']>>;
   declare createdAt: CreationOptional<Date>;
   declare deletedAt: CreationOptional<Date>;
 
@@ -27,6 +29,7 @@ export class Note extends Model<
   declare permissions?: NonAttribute<Permission[]>;
 
   static setAssociations() {
+    Note.belongsTo(Version, { as: 'currentVersionId' });
     Note.hasMany(Permission);
     Note.hasMany(Attachment);
     Note.hasMany(Version);
@@ -40,7 +43,7 @@ Note.init(
       autoIncrement: true,
       primaryKey: true,
     },
-    title: { type: DataTypes.STRING, allowNull: false },
+    name: { type: DataTypes.STRING, allowNull: false },
     createdAt: { type: DataTypes.DATE, allowNull: false },
     deletedAt: { type: DataTypes.DATE },
   },
