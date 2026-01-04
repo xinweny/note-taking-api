@@ -26,8 +26,14 @@ export class Version extends Model<
   declare user?: NonAttribute<User>;
 
   static setAssociations() {
-    Version.belongsTo(Note);
-    Version.belongsTo(User);
+    Version.belongsTo(Note, {
+      foreignKey: 'noteId',
+      as: 'note',
+    });
+    Version.belongsTo(User, {
+      foreignKey: 'versionId',
+      as: 'version',
+    });
   }
 }
 

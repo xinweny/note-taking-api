@@ -25,8 +25,14 @@ export class User extends Model<
   declare permissions?: NonAttribute<Permission[]>;
 
   static setAssociations() {
-    User.hasMany(Version);
-    User.hasMany(Permission);
+    User.hasMany(Version, {
+      foreignKey: 'userId',
+      as: 'versions',
+    });
+    User.hasMany(Permission, {
+      foreignKey: 'userId',
+      as: 'permissions',
+    });
   }
 }
 

@@ -27,8 +27,14 @@ export class Permission extends Model<
   declare note?: NonAttribute<Note>;
 
   static setAssociations() {
-    Permission.belongsTo(Note);
-    Permission.belongsTo(User);
+    Permission.belongsTo(Note, {
+      foreignKey: 'noteId',
+      as: 'note',
+    });
+    Permission.belongsTo(User, {
+      foreignKey: 'userId',
+      as: 'user',
+    });
   }
 }
 

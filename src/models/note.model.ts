@@ -19,20 +19,33 @@ export class Note extends Model<
   InferCreationAttributes<Note>
 > {
   declare id: CreationOptional<number>;
-  declare name: string;
+  declare title: string;
   declare currentVersionId: CreationOptional<ForeignKey<Version['id']>>;
   declare createdAt: CreationOptional<Date>;
   declare deletedAt: CreationOptional<Date>;
 
   declare versions?: NonAttribute<Version[]>;
+  declare currentVersion?: NonAttribute<Version>;
   declare attachments?: NonAttribute<Attachment[]>;
   declare permissions?: NonAttribute<Permission[]>;
 
   static setAssociations() {
-    Note.belongsTo(Version, { as: 'currentVersionId' });
-    Note.hasMany(Permission);
-    Note.hasMany(Attachment);
-    Note.hasMany(Version);
+    Note.hasMany(Permission, {
+      foreignKey: 'noteId',
+      as: 'permissions',
+    });
+    Note.hasMany(Attachment, {
+      foreignKey: 'noteId',
+      as: 'attachments',
+    });
+    Note.hasMany(Version, {
+      foreignKey: 'noteId',
+      as: 'versions'
+    });
+    Note.hasOne(Version, {
+      foreignKey: 'noteId',
+      as: 'currentVersion',
+    }); // Track current version
   }
 }
 
@@ -43,7 +56,7 @@ Note.init(
       autoIncrement: true,
       primaryKey: true,
     },
-    name: { type: DataTypes.STRING, allowNull: false },
+    title: { type: DataTypes.STRING, allowNull: false },
     createdAt: { type: DataTypes.DATE, allowNull: false },
     deletedAt: { type: DataTypes.DATE },
   },

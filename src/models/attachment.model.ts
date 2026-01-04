@@ -23,7 +23,10 @@ export class Attachment extends Model<
   declare note?: NonAttribute<Note>;
 
   static setAssociations() {
-    Attachment.belongsTo(Note);
+    Attachment.belongsTo(Note, {
+      foreignKey: 'noteId',
+      as: 'note',
+    });
   }
 }
 
