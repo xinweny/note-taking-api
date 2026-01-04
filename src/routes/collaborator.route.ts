@@ -1,6 +1,6 @@
 import { Router } from 'express';
 
-import { authorize } from '../middlewares/authorize.middleware.ts';
+import { authorize } from '../handlers/authorize.handler.ts';
 
 import {
   getNoteCollaborators,
@@ -10,9 +10,17 @@ import {
 
 export const collaboratorRouter = Router();
 
-collaboratorRouter.use(authorize());
-collaboratorRouter.get('/', getNoteCollaborators);
+collaboratorRouter.get('/', [
+  authorize(),
+  getNoteCollaborators,
+]);
 
-collaboratorRouter.use(authorize('isAdmin'));
-collaboratorRouter.put('/:collaboratorId', updateCollaborator);
-collaboratorRouter.delete('/:collaboratorId', updateCollaborator);
+collaboratorRouter.put('/:collaboratorId', [
+  authorize('isAdmin'),
+  updateCollaborator,
+]);
+
+collaboratorRouter.delete('/:collaboratorId', [
+  authorize('isAdmin'),
+  deleteCollaborator,
+]);

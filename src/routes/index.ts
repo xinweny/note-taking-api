@@ -1,6 +1,6 @@
 import { Router } from 'express';
 
-import { authenticate } from '../middlewares/index.ts';
+import { authenticate } from '../middlewares/authenticate.middleware.ts';
 
 import { authRouter } from './auth.route.ts';
 import { noteRouter } from './note.route.ts';

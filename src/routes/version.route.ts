@@ -1,6 +1,6 @@
 import { Router } from 'express';
 
-import { authorize } from '../middlewares/authorize.middleware.ts';
+import { authorize } from '../handlers/authorize.handler.ts';
 
 import {
   getNoteVersions,
@@ -9,6 +9,12 @@ import {
 
 export const versionRouter = Router();
 
-versionRouter.use(authorize());
-versionRouter.get('/', getNoteVersions);
-versionRouter.get('/:versionId', getVersionById);
+versionRouter.get('/', [
+  authorize(),
+  getNoteVersions,
+]);
+
+versionRouter.get('/:versionId', [
+  authorize(),
+  getVersionById,
+]);

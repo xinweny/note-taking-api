@@ -5,6 +5,10 @@ export const cache = createClient({
   password: process.env.REDIS_PASSWORD,
 });
 
+cache.on('connect', () => {
+  console.log('Connected to Redis');
+});
+
 cache.on('error', err => {
-  console.log('Redis Client Error', err);
+  console.log('Redis connection error:', err);
 });

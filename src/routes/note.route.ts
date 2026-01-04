@@ -1,6 +1,6 @@
 import { Router } from 'express';
 
-import { authorize } from '../middlewares/authorize.middleware.ts';
+import { authorize } from '../handlers/authorize.handler.ts';
 
 import { collaboratorRouter } from './collaborator.route.ts';
 import { versionRouter } from './version.route.ts';
@@ -24,11 +24,17 @@ noteRouter.use('/:noteId/collaborators', collaboratorRouter);
 noteRouter.use('/:noteId/versions', versionRouter);
 noteRouter.use('/:noteId/attachments', attachmentRouter);
 
-noteRouter.use(authorize());
-noteRouter.get('/:noteId', getNoteById);
+noteRouter.get('/:noteId', [
+  authorize(),
+  getNoteById,
+]);
 
-noteRouter.use(authorize('canEdit'));
-noteRouter.put('/:noteId', updateNote);
+noteRouter.put('/:noteId', [
+  authorize('canEdit'),
+  updateNote,
+]);
 
-noteRouter.use(authorize('isAdmin'));
-noteRouter.delete('/:noteId', deleteNote);
+noteRouter.delete('/:noteId', [
+  authorize('isAdmin'),
+  deleteNote
+]);
