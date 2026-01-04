@@ -3,6 +3,8 @@ import { QueryTypes } from 'sequelize';
 
 import { sequelize } from '../config/db.config.ts';
 
+import { setCache } from '../utils/redis.util.ts';
+
 import { Note, Collaborator, Version } from '../models/index.ts';
 
 // Create empty note without any versions
@@ -64,6 +66,8 @@ export async function getAllNotes(req: Request, res: Response) {
     }
   );
 
+  await setCache(req.cacheKey, notes);
+
   return res.status(200).json({
     data: {
       collaborators,
@@ -86,6 +90,8 @@ export async function getNoteById(req: Request, res: Response) {
   });
 
   if (!collaborator) return res.status(403).json({ message: 'Forbidden' });
+
+  await setCache(req.cacheKey, collaborator.note);
 
   return res.status(200).json({
     data: collaborator.note,

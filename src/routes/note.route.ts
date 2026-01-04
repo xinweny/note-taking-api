@@ -17,7 +17,11 @@ import {
 
 export const noteRouter = Router();
 
-noteRouter.get('/', getAllNotes);
+noteRouter.get('/', [
+  authorize(),
+  checkCache((req: Request) => `notes:${req.user!.id}.userId`),
+  getAllNotes,
+]);
 
 noteRouter.post('/', createNote);
 
@@ -27,7 +31,7 @@ noteRouter.use('/:noteId/attachments', attachmentRouter);
 
 noteRouter.get('/:noteId', [
   authorize(),
-  checkCache((req: Request) => `note:${req.params.noteId}`),
+  checkCache((req: Request) => `note:${req.params.noteId}:id`),
   getNoteById,
 ]);
 
@@ -38,5 +42,5 @@ noteRouter.put('/:noteId', [
 
 noteRouter.delete('/:noteId', [
   authorize('isAdmin'),
-  deleteNote
+  deleteNote,
 ]);

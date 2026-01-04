@@ -16,15 +16,14 @@ export async function createUser(req: Request, res: Response) {
     email,
     password,
   } = req.body;
+
   const hashedPassword = await bcrypt.hash(password, 12);
 
-  const user = User.build({
+  await User.create({
     username,
     email,
     password: hashedPassword,
   });
-
-  await user.save();
 
   return res.status(200).json({
     message: 'User created successfully.',
