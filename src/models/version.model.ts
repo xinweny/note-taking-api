@@ -19,6 +19,7 @@ export class Version extends Model<
 > {
   declare id: CreationOptional<number>;
   declare body: string;
+  declare noteId: ForeignKey<Note['id']>;
   declare userId: ForeignKey<User['id']>;
   declare createdAt: CreationOptional<Date>;
 
@@ -50,5 +51,7 @@ Version.init(
   {
     sequelize,
     underscored: true,
+    timestamps: true,
+    updatedAt: false, // disable update
   }
 );
