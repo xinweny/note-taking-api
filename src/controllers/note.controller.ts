@@ -98,12 +98,18 @@ export async function updateNote(req: Request, res: Response) {
 
   const { body } = req.body;
 
-  // TODO: add concurrency handling strategy
-  await Note.update(
-    { body },
-    { where: { id: noteId } }
-  );
-  
+  try {
+    await Note.update(
+      { body },
+      { where: { id: noteId } }
+    );
+  } catch (err) {
+    // Catch error due to concurrent updates by optimistic locking (version=true)
+    return res.status(400).json({
+      error: err,
+    });
+  }
+
   // Retrieve updated note
   const note = await Note.findByPk(noteId);
 

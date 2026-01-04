@@ -1,6 +1,6 @@
 import { createClient } from 'redis';
 
-const cache = createClient({
+export const cache = createClient({
   url: process.env.REDIS_URL,
   password: process.env.REDIS_PASSWORD,
 });
@@ -8,5 +8,3 @@ const cache = createClient({
 cache.on('error', err => {
   console.log('Redis Client Error', err);
 });
-
-export { cache };
