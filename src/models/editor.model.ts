@@ -4,21 +4,31 @@ import {
   type InferAttributes,
   type InferCreationAttributes,
   type NonAttribute,
+  type ForeignKey,
 } from 'sequelize';
 
 import { db } from '../config/db.config.ts';
 
-export interface EditorModel extends Model<
-  InferAttributes<EditorModel>,
-  InferCreationAttributes<EditorModel>
+import { User } from './user.model.ts';
+import { Note } from './note.model.ts';
+
+export class Editor extends Model<
+  InferAttributes<Editor>,
+  InferCreationAttributes<Editor>
 > {
-  id: number;
-  canEdit: boolean;
-  // notes?: NonAttribute<NoteModel>,
+  declare id: number;
+  declare canEdit: boolean;
+  declare noteId: ForeignKey<number>;
+  declare userId: ForeignKey<number>;
+  
+  declare user?: NonAttribute<User>;
+  declare note?: NonAttribute<Note>;
 }
 
-const Editor = db.define<EditorModel>(
-  'Editor',
+Editor.belongsTo(User);
+Editor.belongsTo(Note);
+
+Editor.init(
   {
     id: {
       type: DataTypes.INTEGER,
@@ -28,8 +38,7 @@ const Editor = db.define<EditorModel>(
     canEdit: { type: DataTypes.BOOLEAN, allowNull: false },
   },
   {
+    sequelize: db,
     underscored: true,
   }
 );
-
-export { Editor };

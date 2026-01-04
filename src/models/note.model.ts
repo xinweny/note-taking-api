@@ -9,21 +9,33 @@ import {
 
 import { db } from '../config/db.config.ts';
 
-import { Attachment } from './attachment.model.ts';
+import { User } from './user.model.ts';
 import { Version } from './version.model.ts';
+import { Editor } from './editor.model.ts';
+import { Attachment } from './attachment.model.ts';
 
-export interface NoteModel extends Model<
-  InferAttributes<NoteModel>,
-  InferCreationAttributes<NoteModel>
+export class Note extends Model<
+  InferAttributes<Note>,
+  InferCreationAttributes<Note>
 > {
-  id: number;
-  title: string;
-  createdAt: CreationOptional<Date>;
-  deletedAt: CreationOptional<Date>;
+  declare id: CreationOptional<number>;
+  declare title: string;
+  declare createdAt: CreationOptional<Date>;
+  declare deletedAt: CreationOptional<Date>;
+
+  declare user?: NonAttribute<User>;
+  declare versions?: NonAttribute<Version[]>;
+  declare editors?: NonAttribute<Editor[]>;
+  declare attachments?: NonAttribute<Attachment[]>;
 }
 
-const Note = db.define<NoteModel>(
-  'Note',
+Note.belongsTo(User);
+
+Note.hasMany(Editor);
+Note.hasMany(Version);
+Note.hasMany(Attachment);
+
+Note.init(
   {
     id: {
       type: DataTypes.INTEGER,
@@ -35,12 +47,8 @@ const Note = db.define<NoteModel>(
     deletedAt: { type: DataTypes.DATE },
   },
   {
+    sequelize: db,
     paranoid: true, // Enables soft-deletion with deleteAt field
     underscored: true,
   }
 );
-
-Note.hasMany(Attachment);
-Note.hasMany(Version);
-
-export { Note };

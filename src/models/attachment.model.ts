@@ -8,17 +8,21 @@ import {
 
 import { db } from '../config/db.config.ts';
 
-export interface AttachmentModel extends Model<
-  InferAttributes<AttachmentModel>,
-  InferCreationAttributes<AttachmentModel>
+import { Note } from './note.model.ts';
+
+export class Attachment extends Model<
+  InferAttributes<Attachment>,
+  InferCreationAttributes<Attachment>
 > {
-  id: number;
-  url: string;
-  // notes?: NonAttribute<NoteModel>,
+  declare id: number;
+  declare url: string;
+  
+  note?: NonAttribute<Note>;
 }
 
-const Attachment = db.define<AttachmentModel>(
-  'Attachment',
+Attachment.belongsTo(Note);
+
+Attachment.init(
   {
     id: {
       type: DataTypes.INTEGER,
@@ -32,8 +36,7 @@ const Attachment = db.define<AttachmentModel>(
     },
   },
   {
+    sequelize: db,
     underscored: true,
   }
 );
-
-export { Attachment };

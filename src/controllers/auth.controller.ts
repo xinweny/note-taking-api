@@ -3,7 +3,9 @@ import { type Request, type Response } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
-import { User } from '../models/user.model.ts';
+import {
+  User,
+} from '../models/user.model.ts';
 
 import {
   generateAccessToken,
@@ -52,7 +54,7 @@ async function loginUser(req: Request, res: Response) {
   // Assign refresh token in http-only cookie
   res.cookie('jwt', refreshToken, {
     httpOnly: true,
-    sameSite: 'None',
+    sameSite: 'none',
     secure: true,
     maxAge: process.env.JWT_REFRESH_TOKEN_EXPIRES_IN * 1000, // in milliseconds
   });

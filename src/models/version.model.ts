@@ -3,22 +3,28 @@ import {
   DataTypes,
   type InferAttributes,
   type InferCreationAttributes,
+  type CreationOptional,
   type NonAttribute,
 } from 'sequelize';
 
 import { db } from '../config/db.config.ts';
 
-export interface VersionModel extends Model<
-  InferAttributes<VersionModel>,
-  InferCreationAttributes<VersionModel>
+import { Note } from './note.model.ts';
+
+export class Version extends Model<
+  InferAttributes<Version>,
+  InferCreationAttributes<Version>
 > {
-  id: number;
-  body: string;
-  createdAt: Date;
+  declare id: CreationOptional<number>;
+  declare body: string;
+  declare createdAt: CreationOptional<Date>;
+
+  declare note?: NonAttribute<Note>;
 }
 
-const Version = db.define<VersionModel>(
-  'Version',
+Version.belongsTo(Note)
+
+Version.init(
   {
     id: {
       type: DataTypes.INTEGER,
@@ -29,8 +35,7 @@ const Version = db.define<VersionModel>(
     createdAt: { type: DataTypes.DATE, allowNull: false },
   },
   {
+    sequelize: db,
     underscored: true,
   }
 );
-
-export { Version };

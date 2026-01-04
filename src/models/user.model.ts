@@ -4,26 +4,31 @@ import {
   type InferAttributes,
   type InferCreationAttributes,
   type NonAttribute,
+  type CreationOptional,
 } from 'sequelize';
 
 import { db } from '../config/db.config.ts';
 
-import { Note, type NoteModel } from './note.model.ts';
+import { Note } from './note.model.ts';
 import { Editor } from './editor.model.ts';
 
-export interface UserModel extends Model<
-  InferAttributes<UserModel>,
-  InferCreationAttributes<UserModel>
+export class User extends Model<
+  InferAttributes<User>,
+  InferCreationAttributes<User>
 > {
-  id: number;
-  username: string;
-  email: string;
-  password: string;
-  notes?: NonAttribute<NoteModel[]>,
+  declare id: CreationOptional<number>;
+  declare username: string;
+  declare email: string;
+  declare password: string;
+
+  declare notes?: NonAttribute<Note>;
+  declare editors?: NonAttribute<Editor>;
 }
 
-const User = db.define<UserModel>(
-  'User',
+User.hasMany(Note);
+User.hasMany(Editor);
+
+User.init(
   {
     id: {
       type: DataTypes.INTEGER,
@@ -44,11 +49,7 @@ const User = db.define<UserModel>(
     password: { type: DataTypes.STRING, allowNull: false },
   },
   {
+    sequelize: db,
     underscored: true,
   }
 );
-
-User.hasMany(Note);
-User.hasMany(Editor);
-
-export { User };
