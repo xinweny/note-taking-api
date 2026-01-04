@@ -1,10 +1,24 @@
-import { Model, DataTypes } from 'sequelize';
+import {
+  Model,
+  DataTypes,
+  type InferAttributes,
+  type InferCreationAttributes,
+  type NonAttribute,
+} from 'sequelize';
 
 import { db } from '../config/db.config.ts';
 
-class Editor extends Model {}
+export interface EditorModel extends Model<
+  InferAttributes<EditorModel>,
+  InferCreationAttributes<EditorModel>
+> {
+  id: number;
+  canEdit: boolean;
+  // notes?: NonAttribute<NoteModel>,
+}
 
-Editor.init(
+const Editor = db.define<EditorModel>(
+  'Editor',
   {
     id: {
       type: DataTypes.INTEGER,
@@ -14,8 +28,7 @@ Editor.init(
     canEdit: { type: DataTypes.BOOLEAN, allowNull: false },
   },
   {
-    sequelize: db,
-    modelName: 'editor',
+    underscored: true,
   }
 );
 

@@ -1,17 +1,35 @@
-import { Model, DataTypes } from 'sequelize';
+import {
+  Model,
+  DataTypes,
+  type InferAttributes,
+  type InferCreationAttributes,
+  type NonAttribute,
+} from 'sequelize';
 
 import { db } from '../config/db.config.ts';
 
-class Version extends Model {}
+export interface VersionModel extends Model<
+  InferAttributes<VersionModel>,
+  InferCreationAttributes<VersionModel>
+> {
+  id: number;
+  body: string;
+  createdAt: Date;
+}
 
-Version.init(
+const Version = db.define<VersionModel>(
+  'Version',
   {
-  body: { type: DataTypes.TEXT, allowNull: false },
-  createdAt: { type: DataTypes.DATE, allowNull: false },
+    id: {
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      primaryKey: true,
+    },
+    body: { type: DataTypes.TEXT, allowNull: false },
+    createdAt: { type: DataTypes.DATE, allowNull: false },
   },
   {
-    sequelize: db,
-    modelName: 'version',
+    underscored: true,
   }
 );
 

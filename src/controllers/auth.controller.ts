@@ -46,8 +46,8 @@ async function loginUser(req: Request, res: Response) {
     message: 'User not found.',
   });
 
-  const accessToken = generateAccessToken(user.id);
-  const refreshToken = generateRefreshToken(user.id);
+  const accessToken = generateAccessToken(user!.id);
+  const refreshToken = generateRefreshToken(user!.id);
 
   // Assign refresh token in http-only cookie
   res.cookie('jwt', refreshToken, {

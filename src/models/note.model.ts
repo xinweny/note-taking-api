@@ -1,13 +1,29 @@
-import { Model, DataTypes } from 'sequelize';
+import {
+  Model,
+  DataTypes,
+  type InferAttributes,
+  type InferCreationAttributes,
+  type NonAttribute,
+  type CreationOptional,
+} from 'sequelize';
 
 import { db } from '../config/db.config.ts';
 
 import { Attachment } from './attachment.model.ts';
 import { Version } from './version.model.ts';
 
-class Note extends Model {};
+export interface NoteModel extends Model<
+  InferAttributes<NoteModel>,
+  InferCreationAttributes<NoteModel>
+> {
+  id: number;
+  title: string;
+  createdAt: CreationOptional<Date>;
+  deletedAt: CreationOptional<Date>;
+}
 
-Note.init(
+const Note = db.define<NoteModel>(
+  'Note',
   {
     id: {
       type: DataTypes.INTEGER,
@@ -19,8 +35,8 @@ Note.init(
     deletedAt: { type: DataTypes.DATE },
   },
   {
-    sequelize: db,
-    modelName: 'Note',
+    paranoid: true, // Enables soft-deletion with deleteAt field
+    underscored: true,
   }
 );
 

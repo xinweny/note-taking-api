@@ -1,10 +1,24 @@
-import { Model, DataTypes } from 'sequelize';
+import {
+  Model,
+  DataTypes,
+  type InferAttributes,
+  type InferCreationAttributes,
+  type NonAttribute,
+} from 'sequelize';
 
 import { db } from '../config/db.config.ts';
 
-class Attachment extends Model {};
+export interface AttachmentModel extends Model<
+  InferAttributes<AttachmentModel>,
+  InferCreationAttributes<AttachmentModel>
+> {
+  id: number;
+  url: string;
+  // notes?: NonAttribute<NoteModel>,
+}
 
-Attachment.init(
+const Attachment = db.define<AttachmentModel>(
+  'Attachment',
   {
     id: {
       type: DataTypes.INTEGER,
@@ -18,8 +32,7 @@ Attachment.init(
     },
   },
   {
-    sequelize: db,
-    modelName: 'attachment',
+    underscored: true,
   }
 );
 

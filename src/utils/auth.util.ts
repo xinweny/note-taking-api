@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 
-function generateAccessToken(id: string) {
+function generateAccessToken(id: number) {
   return jwt.sign(
     { id },
     process.env.JWT_ACCESS_TOKEN_SECRET,
@@ -8,7 +8,7 @@ function generateAccessToken(id: string) {
   );
 }
 
-function generateRefreshToken(id) {
+function generateRefreshToken(id: number) {
   return jwt.sign(
     { id },
     process.env.JWT_REFRESH_TOKEN_SECRET,
