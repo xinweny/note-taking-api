@@ -1,7 +1,7 @@
-import { Router } from 'express';
+import { Router, type Request } from 'express';
 
 import { authorize } from '../middlewares/authorize.middleware.ts';
-import { cache } from '../middlewares/redis.middleware.ts';
+import { checkCache } from '../middlewares/redis.middleware.ts';
 
 import { collaboratorRouter } from './collaborator.route.ts';
 import { versionRouter } from './version.route.ts';
@@ -27,6 +27,7 @@ noteRouter.use('/:noteId/attachments', attachmentRouter);
 
 noteRouter.get('/:noteId', [
   authorize(),
+  checkCache((req: Request) => `note:${req.params.noteId}`),
   getNoteById,
 ]);
 
