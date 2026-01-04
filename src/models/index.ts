@@ -5,11 +5,11 @@ import { Attachment } from './attachment.model.ts';
 import { Collaborator } from './collaborator.model.ts';
 
 // Define relationships to other models after initialization to prevent circular dependencies
-User.setAssociations();
-Note.setAssociations();
-Version.setAssociations();
-Collaborator.setAssociations();
-Attachment.setAssociations();
+User.associate();
+Note.associate();
+Version.associate();
+Collaborator.associate();
+Attachment.associate();
 
 export {
   User,
