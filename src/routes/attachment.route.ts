@@ -4,22 +4,26 @@ import { upload } from '../config/multer.config.ts';
 
 import { authorize } from '../middlewares/authorize.middleware.ts';
 
-import { getNoteAttachments } from '../controllers/attachment.controller.ts';
+import {
+  getAttachments,
+  uploadAttachment,
+  deleteAttachment,
+} from '../controllers/attachment.controller.ts';
 
 export const attachmentRouter = Router();
 
 attachmentRouter.get('/', [
   authorize(),
-  getNoteAttachments,
+  getAttachments,
 ]);
 
 attachmentRouter.post('/', [
   authorize('canEdit'),
-  upload.single,
-
+  upload.single('file'),
+  uploadAttachment,
 ]);
 
 attachmentRouter.delete('/', [
   authorize('canEdit'),
-
+  deleteAttachment,
 ]);
