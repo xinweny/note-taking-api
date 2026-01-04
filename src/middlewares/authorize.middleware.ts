@@ -16,7 +16,7 @@ export function authorize(
 
     const { id: userId } = req.user;
 
-    // Check if authenticated user is an editor of the note
+    // Check if authenticated user is a collaborator of the note
     const collaborator = await Collaborator.findOne({
       where: {
         noteId: +noteId!,
