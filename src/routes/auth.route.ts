@@ -6,12 +6,10 @@ import {
   refreshAccessToken,
 } from '../controllers/auth.controller.ts';
 
-const authRouter = Router();
+export const authRouter = Router();
 
 authRouter.post('/login', loginUser);
 
 authRouter.post('/signup', createUser);
 
 authRouter.post('/refresh', refreshAccessToken);
-
-export { authRouter };

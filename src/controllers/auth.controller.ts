@@ -10,7 +10,7 @@ import {
   generateRefreshToken,
 } from '../utils/auth.util.ts';
 
-async function createUser(req: Request, res: Response) {
+export async function createUser(req: Request, res: Response) {
   const {
     username,
     email,
@@ -31,7 +31,7 @@ async function createUser(req: Request, res: Response) {
   });
 }
 
-async function loginUser(req: Request, res: Response) {
+export async function loginUser(req: Request, res: Response) {
   const { email, password } = req.body;
 
   const user = await User.findOne({
@@ -60,7 +60,7 @@ async function loginUser(req: Request, res: Response) {
   return res.status(200).json({ data: { accessToken } });
 };
 
-async function refreshAccessToken(req: Request, res: Response) {
+export async function refreshAccessToken(req: Request, res: Response) {
   const refreshToken: string | undefined = req.cookies?.jwt;
 
   if (!refreshToken) return res.status(401).json({ message: 'Unauthorized' });
@@ -75,10 +75,4 @@ async function refreshAccessToken(req: Request, res: Response) {
   } catch (err) {
     return res.status(401).json({ message: 'Unauthorized' });
   }
-};
-
-export {
-  createUser,
-  loginUser,
-  refreshAccessToken,
 };

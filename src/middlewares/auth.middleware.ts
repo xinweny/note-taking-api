@@ -4,7 +4,7 @@ import jwt, { type JwtUserPayload } from 'jsonwebtoken';
 import { User } from '../models/user.model.ts';
 import { Editor } from '../models/editor.model.ts';
 
-async function authenticate(req: Request, res: Response, next: NextFunction) {
+export async function authenticate(req: Request, res: Response, next: NextFunction) {
   if (!req.headers.authorization) return res.status(401).json({ message: 'Unauthorized' });
 
   const accessToken = req.headers.authorization.split(' ')[1];
@@ -26,7 +26,7 @@ async function authenticate(req: Request, res: Response, next: NextFunction) {
   }
 }
 
-async function authorize(req: Request, res: Response, next: NextFunction) {
+export async function authorize(req: Request, res: Response, next: NextFunction) {
   const { noteId } = req.params;
 
   if (!req.user) return res.status(401).json({ message: 'Unauthorized' });
@@ -52,8 +52,3 @@ async function authorize(req: Request, res: Response, next: NextFunction) {
 
   next();
 }
-
-export {
-  authenticate,
-  authorize,
-};
