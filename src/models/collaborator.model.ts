@@ -26,7 +26,7 @@ export class Collaborator extends Model<
   declare user?: NonAttribute<User>;
   declare note?: NonAttribute<Note>;
 
-  static setAssociations() {
+  static associate() {
     Collaborator.belongsTo(Note, {
       foreignKey: 'noteId',
       as: 'note',

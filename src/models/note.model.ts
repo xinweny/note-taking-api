@@ -27,7 +27,7 @@ export class Note extends Model<
   declare attachments?: NonAttribute<Attachment[]>;
   declare collaborators?: NonAttribute<Collaborator[]>;
 
-  static setAssociations() {
+  static associate() {
     Note.hasMany(Collaborator, {
       foreignKey: 'noteId',
       as: 'collaborators',
@@ -60,5 +60,8 @@ Note.init(
     paranoid: true, // Enables soft-deletion with deleteAt field
     underscored: true,
     version: true, // Enable optimistic locking to handle concurrency
+    indexes: [
+      { type: 'FULLTEXT', name: 'text_idx', fields: ['body'] }, // Add FULLTEXT index
+    ],
   }
 );

@@ -24,7 +24,7 @@ export class User extends Model<
   declare versions?: NonAttribute<Version[]>;
   declare collaborators?: NonAttribute<Collaborator[]>;
 
-  static setAssociations() {
+  static associate() {
     User.hasMany(Version, {
       foreignKey: 'userId',
       as: 'versions',
