@@ -4,6 +4,7 @@ import { authorize } from '../middlewares/authorize.middleware.ts';
 
 import { collaboratorRouter } from './collaborator.route.ts';
 import { versionRouter } from './version.route.ts';
+import { attachmentRouter } from './attachment.route.ts';
 
 import {
   createNote,
@@ -21,6 +22,7 @@ noteRouter.post('/', createNote);
 
 noteRouter.use('/:noteId/collaborators', collaboratorRouter);
 noteRouter.use('/:noteId/versions', versionRouter);
+noteRouter.use('/:noteId/attachments', attachmentRouter);
 
 noteRouter.use(authorize());
 noteRouter.get('/:noteId', getNoteById);
