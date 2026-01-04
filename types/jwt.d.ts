@@ -1,7 +1,7 @@
 import { JwtPayload } from 'jsonwebtoken';
 
 declare module 'jsonwebtoken' {
-  export interface UserJwtPayload extends JwtPayload {
+  export interface JwtUserPayload extends JwtPayload {
     id: number;
   }
 }

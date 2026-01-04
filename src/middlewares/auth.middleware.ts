@@ -1,5 +1,5 @@
 import { type Request, type Response, type NextFunction } from 'express';
-import jwt, { type UserJwtPayload } from 'jsonwebtoken';
+import jwt, { type JwtUserPayload } from 'jsonwebtoken';
 
 import { User } from '../models/user.model.ts';
 import { Editor } from '../models/editor.model.ts';
@@ -12,11 +12,11 @@ async function authenticate(req: Request, res: Response, next: NextFunction) {
   if (!accessToken) return res.status(401).json({ message: 'Unauthorized' });
 
   try {
-      const payload = <UserJwtPayload>jwt.verify(accessToken, process.env.JWT_ACCESS_TOKEN_SECRET);
+      const payload = <JwtUserPayload>jwt.verify(accessToken, process.env.JWT_ACCESS_TOKEN_SECRET);
 
       const user = payload && await User.findByPk(payload.id);
 
-      if (!user) throw new Error();
+      if (!user) throw new Error(); // TODO: set new error
 
       req.user = { id: user.id };
 
@@ -27,15 +27,16 @@ async function authenticate(req: Request, res: Response, next: NextFunction) {
 }
 
 async function authorize(req: Request, res: Response, next: NextFunction) {
+  const { noteId } = req.params;
+
   if (!req.user) return res.status(401).json({ message: 'Unauthorized' });
 
   const { id: userId } = req.user;
-  const noteId = +req.params.noteId;
 
   // Check if authenticated user is an editor of the note
   const editor = await Editor.findOne({
     where: {
-      noteId,
+      noteId: +noteId!,
       userId,
     },
   });

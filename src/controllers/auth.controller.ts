@@ -1,11 +1,9 @@
 import { type Request, type Response } from 'express';
 
 import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
+import jwt, { type JwtUserPayload } from 'jsonwebtoken';
 
-import {
-  User,
-} from '../models/user.model.ts';
+import { User } from '../models/user.model.ts';
 
 import {
   generateAccessToken,
@@ -62,22 +60,21 @@ async function loginUser(req: Request, res: Response) {
   return res.status(200).json({ data: { accessToken } });
 };
 
-function refreshAccessToken(req: Request, res: Response) {
-  const refreshToken = req.cookies?.jwt;
+async function refreshAccessToken(req: Request, res: Response) {
+  const refreshToken: string | undefined = req.cookies?.jwt;
 
   if (!refreshToken) return res.status(401).json({ message: 'Unauthorized' });
 
-  jwt.verify(
-    refreshToken,
-    process.env.JWT_REFRESH_TOKEN_SECRET,
-    (err, payload) => {
-      if (err || !payload) return res.status(401).json({ message: 'Unauthorized' });
+  try {
+      const payload = <JwtUserPayload>jwt.verify(refreshToken, process.env.JWT_REFRESH_TOKEN_SECRET);
 
+      // Generate new access token
       const accessToken = generateAccessToken(payload.id);
 
       return res.status(200).json({ data: { accessToken } });
-    }
-  );
+  } catch (err) {
+    return res.status(401).json({ message: 'Unauthorized' });
+  }
 };
 
 export {
