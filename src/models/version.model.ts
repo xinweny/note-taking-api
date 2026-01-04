@@ -5,10 +5,12 @@ import {
   type InferCreationAttributes,
   type CreationOptional,
   type NonAttribute,
+  type ForeignKey,
 } from 'sequelize';
 
 import { sequelize } from '../config/db.config.ts';
 
+import { User } from './user.model.ts';
 import { Note } from './note.model.ts';
 
 export class Version extends Model<
@@ -17,9 +19,16 @@ export class Version extends Model<
 > {
   declare id: CreationOptional<number>;
   declare body: string;
+  declare userId: ForeignKey<User['id']>;
   declare createdAt: CreationOptional<Date>;
 
   declare note?: NonAttribute<Note>;
+  declare user?: NonAttribute<User>;
+
+  static setAssociations() {
+    Version.belongsTo(Note);
+    Version.belongsTo(User);
+  }
 }
 
 Version.init(

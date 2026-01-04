@@ -2,7 +2,7 @@ import express from 'express';
 import 'dotenv/config';
 import cookieParser from 'cookie-parser';
 
-import { router } from './routes/router.ts';
+import { router } from './routes/index.ts';
 
 const app = express();
 

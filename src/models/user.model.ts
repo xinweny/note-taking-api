@@ -9,8 +9,8 @@ import {
 
 import { sequelize } from '../config/db.config.ts';
 
-import { Note } from './note.model.ts';
-import { Role } from './role.model.ts';
+import { Version } from './version.model.ts';
+import { Permission } from './permission.model.ts';
 
 export class User extends Model<
   InferAttributes<User>,
@@ -21,8 +21,13 @@ export class User extends Model<
   declare email: string;
   declare password: string;
 
-  declare notes?: NonAttribute<Note>;
-  declare roles?: NonAttribute<Role>;
+  declare versions?: NonAttribute<Version[]>;
+  declare permissions?: NonAttribute<Permission[]>;
+
+  static setAssociations() {
+    User.hasMany(Version);
+    User.hasMany(Permission);
+  }
 }
 
 User.init(
@@ -50,6 +55,3 @@ User.init(
     underscored: true,
   }
 );
-
-User.hasMany(Note, { foreignKey: 'userId' });
-User.hasMany(Role, { foreignKey: 'userId' });

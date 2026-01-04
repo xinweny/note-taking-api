@@ -4,6 +4,8 @@ import {
   type InferAttributes,
   type InferCreationAttributes,
   type NonAttribute,
+  type ForeignKey,
+  type CreationOptional,
 } from 'sequelize';
 
 import { sequelize } from '../config/db.config.ts';
@@ -14,10 +16,15 @@ export class Attachment extends Model<
   InferAttributes<Attachment>,
   InferCreationAttributes<Attachment>
 > {
-  declare id: number;
+  declare id: CreationOptional<number>;
   declare url: string;
+  declare noteId: ForeignKey<Note['id']>;
 
-  note?: NonAttribute<Note>;
+  declare note?: NonAttribute<Note>;
+
+  static setAssociations() {
+    Attachment.belongsTo(Note);
+  }
 }
 
 Attachment.init(
@@ -36,5 +43,6 @@ Attachment.init(
   {
     sequelize,
     underscored: true,
+    timestamps: false,
   }
 );

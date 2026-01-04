@@ -13,28 +13,33 @@ import { sequelize } from '../config/db.config.ts';
 import { User } from './user.model.ts';
 import { Note } from './note.model.ts';
 
-export class Role extends Model<
-  InferAttributes<Role>,
-  InferCreationAttributes<Role>
+export class Permission extends Model<
+  InferAttributes<Permission>,
+  InferCreationAttributes<Permission>
 > {
-  declare id: number;
-  declare userId: ForeignKey<number>;
-  declare noteId: ForeignKey<number>;
-  declare isOwner: CreationOptional<boolean>;
+  declare id: CreationOptional<number>;
+  declare userId: ForeignKey<User['id']>;
+  declare noteId: ForeignKey<Note['id']>;
+  declare isAdmin: CreationOptional<boolean>;
   declare canEdit: CreationOptional<boolean>;
 
   declare user?: NonAttribute<User>;
   declare note?: NonAttribute<Note>;
+
+  static setAssociations() {
+    Permission.belongsTo(Note);
+    Permission.belongsTo(User);
+  }
 }
 
-Role.init(
+Permission.init(
   {
     id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true,
     },
-    isOwner: {
+    isAdmin: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
       defaultValue: false,
@@ -48,5 +53,6 @@ Role.init(
   {
     sequelize,
     underscored: true,
+    timestamps: false,
   }
 );

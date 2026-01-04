@@ -1,15 +1,16 @@
 import { type Request, type Response } from 'express';
 
-import { Note } from '../models/note.model.ts';
-import { Role } from '../models/role.model.ts';
+import { Note, Permission } from '../models/index.ts';
 
 export async function createNote(req: Request, res: Response) {
-  const note = Note.build({
+  const note = await Note.build({
     title: req.body.title,
-    userId: req.user!.id,
-  });
+  }).save();
 
-  await note.save();
+  await Permission.build({
+    noteId: note.id,
+    userId: req.user!.id,
+  }).save();
 
   return res.status(200);
 }

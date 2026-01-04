@@ -1,8 +1,7 @@
 import { type Request, type Response, type NextFunction } from 'express';
 import jwt, { type JwtUserPayload } from 'jsonwebtoken';
 
-import { User } from '../models/user.model.ts';
-import { Role } from '../models/role.model.ts';
+import { User, Permission } from '../models/index.ts';
 
 export async function authenticate(req: Request, res: Response, next: NextFunction) {
   if (!req.headers.authorization) return res.status(401).json({ message: 'Unauthorized' });
@@ -34,7 +33,7 @@ export async function authorize(req: Request, res: Response, next: NextFunction)
   const { id: userId } = req.user;
 
   // Check if authenticated user is an editor of the note
-  const role = await Role.findOne({
+  const permission = await Permission.findOne({
     where: {
       noteId: +noteId!,
       userId,
@@ -43,9 +42,9 @@ export async function authorize(req: Request, res: Response, next: NextFunction)
 
   switch (req.method) {
     case 'GET':
-      if (role) break; // Read allowed if user is an editor of the note
+      if (permission) break; // Read allowed if user is an editor of the note
     case 'POST':
-      if (role?.canEdit) break; // Edit allowed if user is an editor of the note and has canEdit permission
+      if (permission?.canEdit) break; // Edit allowed if user is an editor of the note and has canEdit permission
     default:
       return res.status(403).json({ message: 'Forbidden' });
   }

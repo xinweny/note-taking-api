@@ -3,7 +3,7 @@ import { type Request, type Response } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt, { type JwtUserPayload } from 'jsonwebtoken';
 
-import { User } from '../models/user.model.ts';
+import { User } from '../models/index.ts';
 
 import {
   generateAccessToken,
