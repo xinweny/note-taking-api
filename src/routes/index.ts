@@ -1,7 +1,9 @@
 import { Router } from 'express';
 
-import { authenticate } from '../middlewares/auth.middleware.ts';
+import { authenticate } from '../middlewares/index.ts';
+
 import { authRouter } from './auth.route.ts';
+import { noteRouter } from './note.route.ts';
 
 export const router = Router();
 
@@ -11,3 +13,4 @@ router.use('/auth', authRouter);
 
 // Authenticate all other routes
 router.use(authenticate);
+router.use('/notes', noteRouter);
