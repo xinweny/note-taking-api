@@ -1,11 +1,11 @@
 import { type Request, type Response, type NextFunction } from 'express';
 import { type InferAttributes } from 'sequelize';
 
-import { Permission } from '../models/index.ts';
+import { Collaborator } from '../models/index.ts';
 
 export function authorize(
   role: keyof InferAttributes<
-    Permission,
+    Collaborator,
     { omit: 'id' | 'userId' | 'noteId' }
   > | null = null
 ) {
@@ -17,14 +17,14 @@ export function authorize(
     const { id: userId } = req.user;
 
     // Check if authenticated user is an editor of the note
-    const permission = await Permission.findOne({
+    const collaborator = await Collaborator.findOne({
       where: {
         noteId: +noteId!,
         userId,
       },
     });
 
-    if (role ? !permission?.[role] : !permission) return res.status(403).json({ message: 'Forbidden' });
+    if (role ? !collaborator?.[role] : !collaborator) return res.status(403).json({ message: 'Forbidden' });
 
     next();
   };

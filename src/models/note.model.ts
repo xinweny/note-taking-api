@@ -10,7 +10,7 @@ import {
 import { sequelize } from '../config/db.config.ts';
 
 import { Version } from './version.model.ts';
-import { Permission } from './permission.model.ts';
+import { Collaborator } from './collaborator.model.ts';
 import { Attachment } from './attachment.model.ts';
 
 export class Note extends Model<
@@ -25,12 +25,12 @@ export class Note extends Model<
 
   declare versions?: NonAttribute<Version[]>;
   declare attachments?: NonAttribute<Attachment[]>;
-  declare permissions?: NonAttribute<Permission[]>;
+  declare collaborators?: NonAttribute<Collaborator[]>;
 
   static setAssociations() {
-    Note.hasMany(Permission, {
+    Note.hasMany(Collaborator, {
       foreignKey: 'noteId',
-      as: 'permissions',
+      as: 'collaborators',
     });
     Note.hasMany(Attachment, {
       foreignKey: 'noteId',

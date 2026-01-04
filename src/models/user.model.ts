@@ -10,7 +10,7 @@ import {
 import { sequelize } from '../config/db.config.ts';
 
 import { Version } from './version.model.ts';
-import { Permission } from './permission.model.ts';
+import { Collaborator } from './collaborator.model.ts';
 
 export class User extends Model<
   InferAttributes<User>,
@@ -22,16 +22,16 @@ export class User extends Model<
   declare password: string;
 
   declare versions?: NonAttribute<Version[]>;
-  declare permissions?: NonAttribute<Permission[]>;
+  declare collaborators?: NonAttribute<Collaborator[]>;
 
   static setAssociations() {
     User.hasMany(Version, {
       foreignKey: 'userId',
       as: 'versions',
     });
-    User.hasMany(Permission, {
+    User.hasMany(Collaborator, {
       foreignKey: 'userId',
-      as: 'permissions',
+      as: 'collaborators',
     });
   }
 }

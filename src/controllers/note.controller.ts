@@ -1,6 +1,6 @@
 import { type Request, type Response } from 'express';
 
-import { Note, Permission, Version } from '../models/index.ts';
+import { Note, Collaborator, Version } from '../models/index.ts';
 
 // Create empty note without any versions
 export async function createNote(req: Request, res: Response) {
@@ -20,7 +20,7 @@ export async function createNote(req: Request, res: Response) {
       createdAt: note.createdAt,
     }),
     // Create note creator with admin rights
-    Permission.create({
+    Collaborator.create({
       noteId: note.id,
       userId: req.user!.id,
       isAdmin: true,
@@ -35,9 +35,10 @@ export async function createNote(req: Request, res: Response) {
 
 // Retrieve notes associated with the authenticated user (created and shared), and are not soft-deleted
 export async function getAllNotes(req: Request, res: Response) {
-  const { search } = req.query; // TODO: fulltext search
+  // TODO: fulltext search
+  const { search } = req.query;
 
-  const permissions = await Permission.findAll({
+  const collaborators = await Collaborator.findAll({
     where: { userId: req.user!.id },
   });
 
@@ -47,7 +48,7 @@ export async function getAllNotes(req: Request, res: Response) {
 
   return res.status(200).json({
     data: {
-      permissions,
+      collaborators,
       notes,
     },
   });
@@ -58,7 +59,7 @@ export async function getNoteById(req: Request, res: Response) {
   const userId = req.user!.id;
   const noteId = +req.params.noteId!
 
-  const permission = await Permission.findOne({
+  const collaborator = await Collaborator.findOne({
     where: { noteId, userId },
     include: {
       model: Note,
@@ -66,10 +67,10 @@ export async function getNoteById(req: Request, res: Response) {
     },
   });
 
-  if (!permission) return res.status(403).json({ message: 'Forbidden' });
+  if (!collaborator) return res.status(403).json({ message: 'Forbidden' });
 
   return res.status(200).json({
-    data: permission.note,
+    data: collaborator.note,
   });
 }
 

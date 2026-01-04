@@ -2,7 +2,7 @@ import { Router } from 'express';
 
 import { authorize } from '../middlewares/authorize.middleware.ts';
 
-import { permissionRouter } from './permission.route.ts';
+import { collaboratorRouter } from './collaborator.route.ts';
 import { versionRouter } from './version.route.ts';
 
 import {
@@ -19,7 +19,7 @@ noteRouter.get('/', getAllNotes);
 
 noteRouter.post('/', createNote);
 
-noteRouter.use('/:noteId/permissions', permissionRouter);
+noteRouter.use('/:noteId/collaborators', collaboratorRouter);
 noteRouter.use('/:noteId/versions', versionRouter);
 
 noteRouter.use(authorize());

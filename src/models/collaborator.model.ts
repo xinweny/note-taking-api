@@ -13,9 +13,9 @@ import { sequelize } from '../config/db.config.ts';
 import { User } from './user.model.ts';
 import { Note } from './note.model.ts';
 
-export class Permission extends Model<
-  InferAttributes<Permission>,
-  InferCreationAttributes<Permission>
+export class Collaborator extends Model<
+  InferAttributes<Collaborator>,
+  InferCreationAttributes<Collaborator>
 > {
   declare id: CreationOptional<number>;
   declare userId: ForeignKey<User['id']>;
@@ -27,18 +27,18 @@ export class Permission extends Model<
   declare note?: NonAttribute<Note>;
 
   static setAssociations() {
-    Permission.belongsTo(Note, {
+    Collaborator.belongsTo(Note, {
       foreignKey: 'noteId',
       as: 'note',
     });
-    Permission.belongsTo(User, {
+    Collaborator.belongsTo(User, {
       foreignKey: 'userId',
       as: 'user',
     });
   }
 }
 
-Permission.init(
+Collaborator.init(
   {
     id: {
       type: DataTypes.INTEGER,
