@@ -10,7 +10,7 @@ import {
 import { sequelize } from '../config/db.config.ts';
 
 import { Note } from './note.model.ts';
-import { Editor } from './editor.model.ts';
+import { Role } from './role.model.ts';
 
 export class User extends Model<
   InferAttributes<User>,
@@ -22,7 +22,7 @@ export class User extends Model<
   declare password: string;
 
   declare notes?: NonAttribute<Note>;
-  declare editors?: NonAttribute<Editor>;
+  declare roles?: NonAttribute<Role>;
 }
 
 User.init(
@@ -52,4 +52,4 @@ User.init(
 );
 
 User.hasMany(Note, { foreignKey: 'userId' });
-User.hasMany(Editor, { foreignKey: 'userId' });
+User.hasMany(Role, { foreignKey: 'userId' });

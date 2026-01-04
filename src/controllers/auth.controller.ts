@@ -26,9 +26,7 @@ export async function createUser(req: Request, res: Response) {
 
   await user.save();
 
-  return res.status(200).json({
-    message: `User ${username} created successfully!`,
-  });
+  return res.status(200);
 }
 
 export async function loginUser(req: Request, res: Response) {

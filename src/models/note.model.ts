@@ -5,13 +5,13 @@ import {
   type InferCreationAttributes,
   type NonAttribute,
   type CreationOptional,
+  type ForeignKey,
 } from 'sequelize';
 
 import { sequelize } from '../config/db.config.ts';
 
-import { User } from './user.model.ts';
 import { Version } from './version.model.ts';
-import { Editor } from './editor.model.ts';
+import { Role } from './role.model.ts';
 import { Attachment } from './attachment.model.ts';
 
 export class Note extends Model<
@@ -20,12 +20,12 @@ export class Note extends Model<
 > {
   declare id: CreationOptional<number>;
   declare title: string;
+  declare userId: ForeignKey<number>;
   declare createdAt: CreationOptional<Date>;
   declare deletedAt: CreationOptional<Date>;
 
-  declare user?: NonAttribute<User>;
   declare versions?: NonAttribute<Version[]>;
-  declare editors?: NonAttribute<Editor[]>;
+  declare roles?: NonAttribute<Role[]>;
   declare attachments?: NonAttribute<Attachment[]>;
 }
 
@@ -47,6 +47,6 @@ Note.init(
   }
 );
 
-Note.hasMany(Editor, { foreignKey: 'noteId' });
 Note.hasMany(Version, { foreignKey: 'noteId' });
+Note.hasMany(Role, { foreignKey: 'noteId' });
 Note.hasMany(Attachment, { foreignKey: 'noteId' });
