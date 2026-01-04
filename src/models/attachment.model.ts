@@ -45,6 +45,7 @@ Attachment.init(
   },
   {
     sequelize,
+    tableName: 'attachments',
     underscored: true,
     timestamps: false,
   }

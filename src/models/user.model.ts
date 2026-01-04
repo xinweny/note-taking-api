@@ -58,6 +58,7 @@ User.init(
   },
   {
     sequelize,
+    tableName: 'users',
     underscored: true,
   }
 );

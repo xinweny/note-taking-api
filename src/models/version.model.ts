@@ -50,6 +50,7 @@ Version.init(
   },
   {
     sequelize,
+    tableName: 'versions',
     underscored: true,
     timestamps: true,
     updatedAt: false, // disable update

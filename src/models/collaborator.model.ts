@@ -58,6 +58,7 @@ Collaborator.init(
   },
   {
     sequelize,
+    tableName: 'collaborators',
     underscored: true,
     timestamps: false,
   }

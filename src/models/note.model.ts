@@ -57,6 +57,7 @@ Note.init(
   },
   {
     sequelize,
+    tableName: 'notes',
     paranoid: true, // Enables soft-deletion with deleteAt field
     underscored: true,
     version: true, // Enable optimistic locking to handle concurrency
