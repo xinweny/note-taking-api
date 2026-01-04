@@ -1,4 +1,7 @@
 import { type Request, type Response } from 'express';
+import { QueryTypes } from 'sequelize';
+
+import { sequelize } from '../config/db.config.ts';
 
 import { Note, Collaborator, Version } from '../models/index.ts';
 
@@ -35,16 +38,31 @@ export async function createNote(req: Request, res: Response) {
 
 // Retrieve notes associated with the authenticated user (created and shared), and are not soft-deleted
 export async function getAllNotes(req: Request, res: Response) {
-  // TODO: fulltext search
-  const { search } = req.query;
+  const q = req.query.search || '';
 
   const collaborators = await Collaborator.findAll({
     where: { userId: req.user!.id },
   });
 
-  const notes = await Note.findAll({
-    where: { deletedAt: undefined },
-  });
+  // No native full-text search support in MYSQL, therefore must write raw SQL query
+  const notes: Note[] = await sequelize.query(
+    ' \
+      SELECT * \
+      FROM notes \
+      INNER JOIN collaborators ON notes.id = collaborators.note_id \
+      WHERE collaborators.user_id = :userId \
+      AND notes.deleted_at IS NULL \
+      AND MATCH (notes.body) AGAINST (:query) \
+    ',
+    {
+      replacements: {
+        userId: req.user!.id,
+        query: q,
+      },
+      type: QueryTypes.SELECT,
+      model: Note,
+    }
+  );
 
   return res.status(200).json({
     data: {
