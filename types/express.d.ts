@@ -4,6 +4,8 @@ declare global {
       user?: {
         id: number;
       }
+      file?: Express.Multer.File;
+      cacheKey?: string;
     }
   }
 }

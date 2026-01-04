@@ -1,33 +1,14 @@
-import { type Response } from 'express';
-
 import { redisClient } from '../config/redis.config.ts';
 
-export async function checkCache(options: {
+export async function setCache(
   key: string,
-  res: Response,
-  fetchData: () => Promise<any>,
-  exp: number, // in seconds
-}) {
-  const { key, res, fetchData, exp } = options;
-
-  const cachedData = await redisClient.get(key);
-
-  // If key is present, retrieve data from cache
-  if (cachedData) {
-    return res.status(200).json({
-      data: JSON.parse(cachedData),
-    });
-  }
-
-  // Otherwise, make database query
-  const data = await fetchData();
-
+  data: any,
+  expiresIn: number = 3600 // default 3600 seconds
+) {
   await redisClient.set(key, JSON.stringify(data), {
     expiration: {
       type: 'EX', // specifies expiration time in seconds
-      value: exp,
+      value: expiresIn,
     },
   });
-
-  return res.status(200).json({ data });
 }

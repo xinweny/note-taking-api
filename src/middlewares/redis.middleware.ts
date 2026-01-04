@@ -2,7 +2,7 @@ import { type Request, type Response, type NextFunction } from 'express';
 
 import { redisClient } from '../config/redis.config.ts';
 
-export async function cache(
+export function checkCache(
   getKey: (req: Request) => string
 ) {
   return async (req: Request, res: Response, next: NextFunction) => {
@@ -16,6 +16,8 @@ export async function cache(
         data: JSON.parse(cachedData),
       });
     }
+
+    req.cacheKey = key;
 
     // Continue to route handler
     next();
