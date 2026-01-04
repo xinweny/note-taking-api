@@ -1,6 +1,7 @@
 import { Router } from 'express';
 
-import { authorize } from '../handlers/authorize.handler.ts';
+import { authorize } from '../middlewares/authorize.middleware.ts';
+import { cache } from '../middlewares/redis.middleware.ts';
 
 import { collaboratorRouter } from './collaborator.route.ts';
 import { versionRouter } from './version.route.ts';

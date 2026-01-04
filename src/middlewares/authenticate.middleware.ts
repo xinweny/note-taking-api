@@ -15,7 +15,7 @@ export async function authenticate(req: Request, res: Response, next: NextFuncti
 
       const user = payload && await User.findByPk(payload.id);
 
-      if (!user) throw new Error(); // TODO: set new error
+      if (!user) throw new Error(); // TODO: set up error handler
 
       req.user = { id: user.id };
 

@@ -1,6 +1,6 @@
 import { Router } from 'express';
 
-import { authorize } from '../handlers/authorize.handler.ts';
+import { authorize } from '../middlewares/authorize.middleware.ts';
 
 import {
   getNoteCollaborators,

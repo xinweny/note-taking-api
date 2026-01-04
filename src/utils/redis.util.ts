@@ -2,7 +2,7 @@ import { type Response } from 'express';
 
 import { redisClient } from '../config/redis.config.ts';
 
-export async function cacheData(options: {
+export async function checkCache(options: {
   key: string,
   res: Response,
   fetchData: () => Promise<any>,
