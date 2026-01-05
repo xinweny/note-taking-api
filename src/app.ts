@@ -15,8 +15,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true })); // Use qs library when true; Use querystring library when false
 app.use(cookieParser());
 
-app.use('/', (req, res) => {
-  res.status(200).json('Note Taking API');
+app.get('/', (req, res) => {
+  return res.status(200).json('Note Taking API');
 });
 
 // App router
