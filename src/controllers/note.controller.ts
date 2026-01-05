@@ -13,12 +13,16 @@ import {
 
 // Create empty note without any versions
 export async function createNote(req: Request, res: Response) {
+  const userId = req.user!.id;
+
   const { title, body } = req.body;
 
-  const note = await createUserNote(req.user!.id, {
+  const note = await createUserNote(userId, {
     title,
     body,
   });
+
+  await invalidateCache(`notes:${userId}`);
 
   return res.status(200).json({
     data: note,
@@ -27,7 +31,7 @@ export async function createNote(req: Request, res: Response) {
 
 // Retrieve notes associated with the authenticated user (created and shared), and are not soft-deleted
 export async function getAllNotes(req: Request, res: Response) {
-  const query = req.query.search || '';
+  const query = req.query.keywords || '';
   const userId = req.user!.id;
 
   const cacheKey = `notes:${userId}:${query}`;

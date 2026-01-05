@@ -79,7 +79,6 @@ export async function getUserNotesByKeyword(userId: number, keyword: string) {
     ' \
       SELECT * \
       FROM notes \
-      INNER JOIN versions ON notes.id = versions.note_id \
       INNER JOIN collaborators ON notes.id = collaborators.note_id \
       WHERE collaborators.user_id = :userId \
       AND notes.deleted_at IS NULL \
@@ -94,6 +93,8 @@ export async function getUserNotesByKeyword(userId: number, keyword: string) {
       model: Note,
     },
   );
+
+  console.log('HI');
 
   return notes;
 }
