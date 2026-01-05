@@ -3,11 +3,11 @@ declare global {
     interface Request {
       user?: {
         id: number;
-      }
+      };
       file?: Express.Multer.File;
       cacheKey?: string;
     }
   }
 }
 
-export {}
+export {};

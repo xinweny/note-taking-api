@@ -35,12 +35,6 @@ noteRouter.get('/:noteId', [
   getNoteById,
 ]);
 
-noteRouter.put('/:noteId', [
-  authorize('canEdit'),
-  updateNote,
-]);
+noteRouter.put('/:noteId', [authorize('canEdit'), updateNote]);
 
-noteRouter.delete('/:noteId', [
-  authorize('isAdmin'),
-  deleteNote,
-]);
+noteRouter.delete('/:noteId', [authorize('isAdmin'), deleteNote]);

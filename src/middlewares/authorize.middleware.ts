@@ -4,10 +4,9 @@ import { type InferAttributes } from 'sequelize';
 import { Collaborator } from '../models/index.ts';
 
 export function authorize(
-  role: keyof InferAttributes<
-    Collaborator,
-    { omit: 'id' | 'userId' | 'noteId' }
-  > | null = null
+  role:
+    | keyof InferAttributes<Collaborator, { omit: 'id' | 'userId' | 'noteId' }>
+    | null = null,
 ) {
   return async (req: Request, res: Response, next: NextFunction) => {
     const { noteId } = req.params;
@@ -24,7 +23,8 @@ export function authorize(
       },
     });
 
-    if (role ? !collaborator?.[role] : !collaborator) return res.status(403).json({ message: 'Forbidden' });
+    if (role ? !collaborator?.[role] : !collaborator)
+      return res.status(403).json({ message: 'Forbidden' });
 
     next();
   };

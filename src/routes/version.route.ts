@@ -9,12 +9,6 @@ import {
 
 export const versionRouter = Router();
 
-versionRouter.get('/', [
-  authorize(),
-  getNoteVersions,
-]);
+versionRouter.get('/', [authorize(), getNoteVersions]);
 
-versionRouter.get('/:versionId', [
-  authorize(),
-  getVersionById,
-]);
+versionRouter.get('/:versionId', [authorize(), getVersionById]);

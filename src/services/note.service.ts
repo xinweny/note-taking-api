@@ -5,7 +5,13 @@ import { sequelize } from '../config/db.config.ts';
 import { Note, Collaborator, Version } from '../models/index.ts';
 
 // Create note with first version
-export async function createUserNote(userId: number, params: InferCreationAttributes<Note, { omit: 'id' | 'createdAt' | 'deletedAt' }>) {
+export async function createUserNote(
+  userId: number,
+  params: InferCreationAttributes<
+    Note,
+    { omit: 'id' | 'createdAt' | 'deletedAt' }
+  >,
+) {
   const note = await Note.create(params);
 
   await Promise.all([
@@ -28,7 +34,7 @@ export async function createUserNote(userId: number, params: InferCreationAttrib
   return await Note.findByPk(note.id, {
     include: [
       {
-        association: 'versions'
+        association: 'versions',
       },
     ],
   });
@@ -41,17 +47,21 @@ export async function getNotesByUserId(userId: number) {
     include: [
       {
         association: 'versions',
-        include: [{
-          association: 'user',
-          attributes: ['id', 'username'],
-        }],
+        include: [
+          {
+            association: 'user',
+            attributes: ['id', 'username'],
+          },
+        ],
       },
       {
         association: 'collaborators',
-        include: [{
-          association: 'user',
-          attributes: ['id', 'username'],
-        }],
+        include: [
+          {
+            association: 'user',
+            attributes: ['id', 'username'],
+          },
+        ],
       },
     ],
   });
@@ -79,7 +89,7 @@ export async function getUserNotesByKeyword(userId: number, keyword: string) {
       },
       type: QueryTypes.SELECT,
       model: Note,
-    }
+    },
   );
 
   return notes;
@@ -91,17 +101,21 @@ export async function getUserNoteById(noteId: number) {
     include: [
       {
         association: 'versions',
-        include: [{
-          association: 'user',
-          attributes: ['id', 'username'],
-        }],
+        include: [
+          {
+            association: 'user',
+            attributes: ['id', 'username'],
+          },
+        ],
       },
       {
         association: 'collaborators',
-        include: [{
-          association: 'user',
-          attributes: ['id', 'username'],
-        }],
+        include: [
+          {
+            association: 'user',
+            attributes: ['id', 'username'],
+          },
+        ],
       },
     ],
   });
@@ -110,14 +124,18 @@ export async function getUserNoteById(noteId: number) {
 }
 
 // Update note body
-export async function updateUserNote(noteId: number, userId: number, params: InferCreationAttributes<Note, { omit: 'id' | 'createdAt' | 'deletedAt' }>) {
+export async function updateUserNote(
+  noteId: number,
+  userId: number,
+  params: InferCreationAttributes<
+    Note,
+    { omit: 'id' | 'createdAt' | 'deletedAt' }
+  >,
+) {
   const { body, title } = params;
 
   try {
-    await Note.update(
-      { title, body },
-      { where: { id: noteId } }
-    );
+    await Note.update({ title, body }, { where: { id: noteId } });
   } catch (err) {
     // Catch error due to concurrent updates by optimistic locking (version=true)
     throw new Error();

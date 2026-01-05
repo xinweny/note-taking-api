@@ -38,7 +38,7 @@ export class Note extends Model<
     });
     Note.hasMany(Version, {
       foreignKey: 'noteId',
-      as: 'versions'
+      as: 'versions',
     });
   }
 }
@@ -64,5 +64,5 @@ Note.init(
     indexes: [
       { type: 'FULLTEXT', name: 'text_idx', fields: ['body'] }, // Add FULLTEXT index
     ],
-  }
+  },
 );

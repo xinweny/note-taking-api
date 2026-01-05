@@ -24,11 +24,4 @@ if (process.env.NODE_ENV === 'development') {
   }
 }
 
-
-export {
-  User,
-  Note,
-  Version,
-  Collaborator,
-  Attachment,
-}
+export { User, Note, Version, Collaborator, Attachment };

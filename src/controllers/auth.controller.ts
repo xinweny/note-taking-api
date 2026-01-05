@@ -11,11 +11,7 @@ import {
 import { createUser, getUserByEmail } from '../services/user.service.ts';
 
 export async function signupUser(req: Request, res: Response) {
-  const {
-    username,
-    email,
-    password,
-  } = req.body;
+  const { username, email, password } = req.body;
 
   const hashedPassword = await bcrypt.hash(password, 12);
 
@@ -39,9 +35,10 @@ export async function loginUser(req: Request, res: Response) {
     ? await bcrypt.compare(password, user.password)
     : false;
 
-  if (!isPasswordMatch) return res.status(401).json({
-    message: 'User not found.',
-  });
+  if (!isPasswordMatch)
+    return res.status(401).json({
+      message: 'User not found.',
+    });
 
   const accessToken = generateAccessToken(user!.id);
   const refreshToken = generateRefreshToken(user!.id);
@@ -55,7 +52,7 @@ export async function loginUser(req: Request, res: Response) {
   });
 
   return res.status(200).json({ data: { accessToken } });
-};
+}
 
 export async function refreshAccessToken(req: Request, res: Response) {
   const refreshToken: string | undefined = req.cookies?.jwt;
@@ -63,7 +60,10 @@ export async function refreshAccessToken(req: Request, res: Response) {
   if (!refreshToken) return res.status(401).json({ message: 'Unauthorized' });
 
   try {
-    const payload = jwt.verify(refreshToken, process.env.JWT_REFRESH_TOKEN_SECRET) as JwtUserPayload;
+    const payload = jwt.verify(
+      refreshToken,
+      process.env.JWT_REFRESH_TOKEN_SECRET,
+    ) as JwtUserPayload;
 
     // Generate new access token
     const accessToken = generateAccessToken(payload.id);
@@ -72,4 +72,4 @@ export async function refreshAccessToken(req: Request, res: Response) {
   } catch (err) {
     return res.status(401).json({ message: 'Unauthorized' });
   }
-};
+}

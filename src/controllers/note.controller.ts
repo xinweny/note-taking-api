@@ -57,11 +57,10 @@ export async function getNoteById(req: Request, res: Response) {
 export async function updateNote(req: Request, res: Response) {
   const { title, body } = req.body;
 
-  const note = await updateUserNote(
-    +req.params.noteId!,
-    req.user!.id,
-    { title, body }
-  );
+  const note = await updateUserNote(+req.params.noteId!, req.user!.id, {
+    title,
+    body,
+  });
 
   return res.status(200).json({
     data: note,

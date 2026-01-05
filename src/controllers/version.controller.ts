@@ -12,7 +12,7 @@ export async function getNoteVersions(req: Request, res: Response) {
   return res.status(200).json({
     data: versions,
   });
-} 
+}
 
 // Get specific version of note to allow reversion to previous versions
 export async function getVersionById(req: Request, res: Response) {
@@ -21,4 +21,4 @@ export async function getVersionById(req: Request, res: Response) {
   return res.status(200).json({
     data: version,
   });
-} 
+}

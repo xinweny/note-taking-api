@@ -17,9 +17,12 @@ export async function getNoteCollaborators(req: Request, res: Response) {
 
 // Update collaborator permissions
 export async function updateCollaborator(req: Request, res: Response) {
-  const collaborator = await updateCollaboratorPermissions(+req.params.collaboratorId!, {
-    canEdit: !!req.body.canEdit,
-  });
+  const collaborator = await updateCollaboratorPermissions(
+    +req.params.collaboratorId!,
+    {
+      canEdit: !!req.body.canEdit,
+    },
+  );
 
   return res.status(200).json({
     data: collaborator,
@@ -31,6 +34,6 @@ export async function deleteCollaborator(req: Request, res: Response) {
   await deleteCollaboratorById(+req.params.collaboratorId!);
 
   return res.status(200).json({
-    message: 'Collaborator deleted successfully.'
+    message: 'Collaborator deleted successfully.',
   });
 }

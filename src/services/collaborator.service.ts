@@ -10,7 +10,7 @@ export async function getCollaboratorsByNoteId(noteId: number) {
       association: 'user',
       attributes: ['id', 'username'],
     },
-});
+  });
 
   return collaborators;
 }
@@ -18,7 +18,10 @@ export async function getCollaboratorsByNoteId(noteId: number) {
 // Update collaborator permissions
 export async function updateCollaboratorPermissions(
   collaboratorId: number,
-  params: InferAttributes<Collaborator, { omit: 'id' | 'userId' | 'noteId' | 'isAdmin' }>
+  params: InferAttributes<
+    Collaborator,
+    { omit: 'id' | 'userId' | 'noteId' | 'isAdmin' }
+  >,
 ) {
   const collaborator = await Collaborator.findByPk(collaboratorId);
 

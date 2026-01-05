@@ -2,9 +2,7 @@ import { type Request, type Response, type NextFunction } from 'express';
 
 import { redisClient } from '../config/redis.config.ts';
 
-export function checkCache(
-  getKey: (req: Request) => string
-) {
+export function checkCache(getKey: (req: Request) => string) {
   return async (req: Request, res: Response, next: NextFunction) => {
     const key = getKey(req);
 

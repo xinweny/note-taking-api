@@ -61,5 +61,5 @@ Collaborator.init(
     tableName: 'collaborators',
     underscored: true,
     timestamps: false,
-  }
+  },
 );

@@ -3,7 +3,7 @@ import { redisClient } from '../config/redis.config.ts';
 export async function setCache(
   key: string | undefined,
   data: any,
-  expiresIn: number = 3600 // default 3600 seconds
+  expiresIn: number = 3600, // default 3600 seconds
 ) {
   if (!key) return;
 

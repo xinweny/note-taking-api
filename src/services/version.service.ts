@@ -7,7 +7,7 @@ export async function getVersionsByNoteId(noteId: number) {
   });
 
   return versions;
-} 
+}
 
 // Get specific version of note to allow reversion to previous versions
 export async function getNoteVersionById(versionId: string) {

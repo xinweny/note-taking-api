@@ -48,5 +48,5 @@ Attachment.init(
     tableName: 'attachments',
     underscored: true,
     timestamps: false,
-  }
+  },
 );

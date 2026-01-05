@@ -42,7 +42,7 @@ User.init(
     id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
-      primaryKey: true, 
+      primaryKey: true,
     },
     username: {
       type: DataTypes.STRING,
@@ -69,7 +69,7 @@ User.init(
       {
         unique: true,
         fields: ['username'],
-      }
-    ]
-  }
+      },
+    ],
+  },
 );

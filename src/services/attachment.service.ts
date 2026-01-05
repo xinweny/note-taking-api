@@ -15,7 +15,10 @@ export async function getAttachmentsByNoteId(noteId: number) {
 }
 
 // Upload attachment to AWS S3
-export async function uploadAttachmentToS3(file: Express.Multer.File, noteId: number) {
+export async function uploadAttachmentToS3(
+  file: Express.Multer.File,
+  noteId: number,
+) {
   try {
     // Generate a unique file name
     const fileKey = `uploads/${uuidv4()}_${file.originalname}`;
@@ -42,7 +45,7 @@ export async function uploadAttachmentToS3(file: Express.Multer.File, noteId: nu
 
     return attachment;
   } catch (error) {
-    throw new Error();
+    throw new Error(error as any);
   }
 }
 

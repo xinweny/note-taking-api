@@ -12,10 +12,7 @@ import {
 
 export const attachmentRouter = Router();
 
-attachmentRouter.get('/', [
-  authorize(),
-  getAttachments,
-]);
+attachmentRouter.get('/', [authorize(), getAttachments]);
 
 attachmentRouter.post('/', [
   authorize('canEdit'),
@@ -23,7 +20,4 @@ attachmentRouter.post('/', [
   uploadAttachment,
 ]);
 
-attachmentRouter.delete('/', [
-  authorize('canEdit'),
-  deleteAttachment,
-]);
+attachmentRouter.delete('/', [authorize('canEdit'), deleteAttachment]);

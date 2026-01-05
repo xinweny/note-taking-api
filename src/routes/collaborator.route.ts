@@ -10,10 +10,7 @@ import {
 
 export const collaboratorRouter = Router();
 
-collaboratorRouter.get('/', [
-  authorize(),
-  getNoteCollaborators,
-]);
+collaboratorRouter.get('/', [authorize(), getNoteCollaborators]);
 
 collaboratorRouter.put('/:collaboratorId', [
   authorize('isAdmin'),
