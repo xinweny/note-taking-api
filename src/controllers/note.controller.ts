@@ -30,7 +30,7 @@ export async function getAllNotes(req: Request, res: Response) {
   const query = req.query.search || '';
   const userId = req.user!.id;
 
-  const cacheKey = `notes:${req.user!.id}:${query}`;
+  const cacheKey = `notes:${userId}:${query}`;
 
   const cached = await checkCache(cacheKey);
 
@@ -73,12 +73,15 @@ export async function updateNote(req: Request, res: Response) {
   const noteId = +req.params.noteId!;
   const userId = req.user!.id;
 
-  const note = await updateUserNote(+req.params.noteId!, req.user!.id, {
+  const note = await updateUserNote(noteId, userId, {
     title,
     body,
   });
 
-  await invalidateCache(`notes:${req.user!.id}:userId`);
+  await Promise.all([
+    invalidateCache(`note:${note.id}`),
+    invalidateCache(`notes:${userId}`),
+  ]);
 
   return res.status(200).json({
     data: note,
@@ -87,7 +90,15 @@ export async function updateNote(req: Request, res: Response) {
 
 // Soft delete note
 export async function deleteNote(req: Request, res: Response) {
-  await deleteNoteById(+req.params.noteId!);
+  const noteId = +req.params.noteId!;
+  const userId = req.user!.id;
+
+  await deleteNoteById(noteId);
+
+  await Promise.all([
+    invalidateCache(`note:${noteId}`),
+    invalidateCache(`notes:${userId}`),
+  ]);
 
   return res.status(200).json({ message: 'Note soft-deleted successfully.' });
 }
