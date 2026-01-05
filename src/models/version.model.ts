@@ -58,7 +58,7 @@ Version.init(
     indexes: [
       {
         unique: true,
-        fields: ['noteId', 'userId'],
+        fields: ['note_id', 'user_id'],
       },
     ],
   },
