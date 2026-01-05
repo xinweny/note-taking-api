@@ -5,8 +5,6 @@ export const redisClient = createClient({
   password: process.env.REDIS_PASSWORD,
 });
 
-await redisClient.connect();
-
 redisClient.on('connect', () => {
   console.log('Connected to Redis');
 });
@@ -14,3 +12,7 @@ redisClient.on('connect', () => {
 redisClient.on('error', (err) => {
   console.error('Redis connection error:', err);
 });
+
+export async function connectCache() {
+  await redisClient.connect();
+}

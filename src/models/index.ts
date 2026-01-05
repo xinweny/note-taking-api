@@ -13,18 +13,4 @@ Version.associate();
 Collaborator.associate();
 Attachment.associate();
 
-// Sync models to database
-if (process.env.NODE_ENV === 'development') {
-  try {
-    await sequelize.sync({
-      // force: true, // drop all tables
-      force: false,
-      logging: false,
-    });
-    console.log('Database synchronization complete.');
-  } catch (error) {
-    console.error('Unable to sync to database:', error);
-  }
-}
-
 export { User, Note, Version, Collaborator, Attachment };

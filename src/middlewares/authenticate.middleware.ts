@@ -3,7 +3,7 @@ import jwt, { type JwtUserPayload } from 'jsonwebtoken';
 
 import { AuthenticationError } from '../errors/authentication-error.ts';
 
-import { User } from '../models/index.ts';
+import { getUserById } from '../services/user.service.ts';
 
 export async function authenticate(
   req: Request,
@@ -14,6 +14,8 @@ export async function authenticate(
 
   const accessToken = req.headers.authorization.split(' ')[1];
 
+  console.log(accessToken);
+
   if (!accessToken) throw new AuthenticationError();
 
   try {
@@ -22,9 +24,12 @@ export async function authenticate(
       process.env.JWT_ACCESS_TOKEN_SECRET,
     ) as JwtUserPayload;
 
-    const user = payload && (await User.findByPk(payload.id));
+    if (!payload) throw new AuthenticationError();
+
+    const user = await getUserById(payload.id);
 
     if (!user) throw new AuthenticationError();
+
     req.user = { id: user.id };
 
     next();

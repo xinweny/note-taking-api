@@ -10,8 +10,13 @@ export async function createUser(
   return user;
 }
 
+export async function getUserById(userId: number) {
+  const user = await User.findByPk(userId);
+
+  return user;
+}
+
 export async function getUserByEmail(email: string) {
-  console.log(email);
   const user = await User.findOne({
     where: { email },
   });

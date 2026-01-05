@@ -1,7 +1,11 @@
 import { app } from './app.ts';
 
-const port = process.env.PORT || 3000;
+import { syncDb } from './config/db.config.ts';
+import { connectCache } from './config/redis.config.ts';
 
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
+connectCache();
+syncDb();
+
+app.listen(process.env.PORT, () => {
+  console.log(`Server is running on port ${process.env.PORT}`);
 });

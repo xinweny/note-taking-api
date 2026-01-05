@@ -44,6 +44,7 @@ export async function createUserNote(
 
 // Retrieve notes associated with the authenticated user (created and shared), and are not soft-deleted
 export async function getNotesByUserId(userId: number) {
+  console.log('hi');
   const notes = await Note.findAll({
     where: { '$collaborators.user_id$': userId },
     include: [

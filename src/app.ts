@@ -15,7 +15,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true })); // Use qs library when true; Use querystring library when false
 app.use(cookieParser());
 
-app.get('/', (req, res) => {
+router.get('/', (req, res) => {
   return res.status(200).json('Note Taking API');
 });
 
@@ -23,7 +23,7 @@ app.get('/', (req, res) => {
 app.use(router);
 
 // 404 not found for all other routes
-router.use('*path', (req, res) => {
+router.use('/{*path}', (req, res) => {
   return res.status(404).json('Not Found');
 });
 
