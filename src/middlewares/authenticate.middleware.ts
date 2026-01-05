@@ -14,8 +14,6 @@ export async function authenticate(
 
   const accessToken = req.headers.authorization.split(' ')[1];
 
-  console.log(accessToken);
-
   if (!accessToken) throw new AuthenticationError();
 
   try {

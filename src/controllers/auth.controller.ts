@@ -37,8 +37,6 @@ export async function loginUser(req: Request, res: Response) {
 
   const user = await getUserByEmail(email);
 
-  console.log(user);
-
   const isPasswordMatch = user
     ? await bcrypt.compare(password, user.password)
     : false;
