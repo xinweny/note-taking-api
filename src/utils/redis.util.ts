@@ -23,9 +23,9 @@ export async function setCache(
 }
 
 export async function invalidateCache(key: string) {
-  const keys = (await redisClient.scan('0', { MATCH: key })).keys;
+  const keys = (await redisClient.scan('0', { MATCH: `${key}*` })).keys;
 
-  await redisClient.del(keys);
+  if (keys.length > 0) await redisClient.del(keys);
 
   return;
 }
