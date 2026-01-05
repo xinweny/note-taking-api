@@ -6,6 +6,9 @@
   "type": "module",
   "scripts": {
     "start": "nodemon ./src/server.ts",
+    "eslint-check-only": "npx eslint .",
+    "eslint-fix": "npx eslint . --fix",
+    "prettier": "npx prettier --write .",
     "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
