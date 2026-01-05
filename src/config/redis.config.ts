@@ -5,6 +5,8 @@ export const redisClient = createClient({
   password: process.env.REDIS_PASSWORD,
 });
 
+await redisClient.connect();
+
 redisClient.on('connect', () => {
   console.log('Connected to Redis');
 });

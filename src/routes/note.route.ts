@@ -20,7 +20,6 @@ export const noteRouter = Router();
 noteRouter.post('/', createNote);
 
 noteRouter.get('/', [
-  authorize(),
   checkCache((req: Request) => `notes:${req.user!.id}.userId`),
   getAllNotes,
 ]);

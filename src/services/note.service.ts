@@ -44,8 +44,8 @@ export async function createUserNote(
 
 // Retrieve notes associated with the authenticated user (created and shared), and are not soft-deleted
 export async function getNotesByUserId(userId: number) {
-  const collaboratorsWithNotes = await Collaborator.findAll({
-    where: { userId },
+  const notes = await Note.findAll({
+    where: { '$collaborators.user_id$': userId },
     include: [
       {
         association: 'versions',
@@ -68,7 +68,7 @@ export async function getNotesByUserId(userId: number) {
     ],
   });
 
-  return collaboratorsWithNotes;
+  return notes;
 }
 
 // Full text-search of user-associated notes

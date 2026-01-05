@@ -11,6 +11,7 @@ export async function createUser(
 }
 
 export async function getUserByEmail(email: string) {
+  console.log(email);
   const user = await User.findOne({
     where: { email },
   });

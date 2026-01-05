@@ -23,7 +23,7 @@ app.get('/', (req, res) => {
 app.use(router);
 
 // 404 not found for all other routes
-router.use('/{*path}', (req, res) => {
+router.use('*path', (req, res) => {
   return res.status(404).json('Not Found');
 });
 

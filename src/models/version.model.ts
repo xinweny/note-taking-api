@@ -33,8 +33,8 @@ export class Version extends Model<
       as: 'note',
     });
     Version.belongsTo(User, {
-      foreignKey: 'versionId',
-      as: 'version',
+      foreignKey: 'userId',
+      as: 'user',
     });
   }
 }

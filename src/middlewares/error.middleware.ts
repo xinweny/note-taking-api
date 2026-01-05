@@ -1,4 +1,5 @@
 import { type Request, type Response, type NextFunction } from 'express';
+import { ValidationError } from 'sequelize';
 
 import { CustomError } from '../errors/custom-error.ts';
 
