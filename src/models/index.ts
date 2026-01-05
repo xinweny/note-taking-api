@@ -16,7 +16,10 @@ Attachment.associate();
 // Sync models to database
 if (process.env.NODE_ENV === 'development') {
   try {
-    await sequelize.sync({ force: true, logging: false });
+    await sequelize.sync({
+      force: false, // true to drop db whenever sync is run, false to persist data
+      logging: false,
+    });
     console.log('Database synchronization complete.');
   } catch (error) {
     console.error('Unable to sync to database:', error);
