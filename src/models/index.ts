@@ -17,7 +17,8 @@ Attachment.associate();
 if (process.env.NODE_ENV === 'development') {
   try {
     await sequelize.sync({
-      force: false, // true to drop db whenever sync is run, false to persist data
+      // force: true, // drop all tables
+      force: false,
       logging: false,
     });
     console.log('Database synchronization complete.');

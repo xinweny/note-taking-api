@@ -11,8 +11,8 @@ export function errorHandler(
   console.error(err);
 
   return err instanceof CustomError
-    ? res.status(err.statusCode).json(err.serialize())
+    ? res.status(err.statusCode).json({ message: err.message })
     : res.status(500).json({
-        message: 'Something went wrong.',
+        message: 'Internal Server Error',
       });
 }

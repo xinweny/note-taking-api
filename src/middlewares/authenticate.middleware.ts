@@ -16,15 +16,20 @@ export async function authenticate(
 
   if (!accessToken) throw new AuthenticationError();
 
-  const payload = jwt.verify(
-    accessToken,
-    process.env.JWT_ACCESS_TOKEN_SECRET,
-  ) as JwtUserPayload;
+  try {
+    const payload = jwt.verify(
+      accessToken,
+      process.env.JWT_ACCESS_TOKEN_SECRET,
+    ) as JwtUserPayload;
 
-  const user = payload && (await User.findByPk(payload.id));
+    const user = payload && (await User.findByPk(payload.id));
 
-  if (!user) throw new AuthenticationError();
-  req.user = { id: user.id };
+    if (!user) throw new AuthenticationError();
+    req.user = { id: user.id };
 
-  next();
+    next();
+  } catch (err) {
+    if (err instanceof jwt.TokenExpiredError)
+      throw new AuthenticationError('Access token expired');
+  }
 }

@@ -5,8 +5,6 @@ import cors from 'cors';
 
 import { errorHandler } from './middlewares/error.middleware.ts';
 
-import { NotFoundError } from './errors/not-found-error.ts';
-
 import { router } from './routes/index.ts';
 
 const app = express();
@@ -24,8 +22,9 @@ app.get('/', (req, res) => {
 // App router
 app.use(router);
 
-app.all('/{*path}', (req, res) => {
-  return res.status(404).json('Not found');
+// 404 not found for all other routes
+router.use('/{*path}', (req, res) => {
+  return res.status(404).json('Not Found');
 });
 
 // Custom error handler middleware

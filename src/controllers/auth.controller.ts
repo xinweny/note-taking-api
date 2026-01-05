@@ -51,10 +51,8 @@ export async function loginUser(req: Request, res: Response) {
     httpOnly: true,
     sameSite: 'none',
     secure: true,
-    maxAge: process.env.JWT_REFRESH_TOKEN_EXPIRES_IN * 1000, // in milliseconds
+    maxAge: process.env.JWT_REFRESH_TOKEN_EXPIRES_IN, // in milliseconds
   });
-
-  console.log('hi');
 
   return res.status(200).json({ data: { accessToken } });
 }
