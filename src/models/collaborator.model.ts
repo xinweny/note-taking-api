@@ -61,5 +61,11 @@ Collaborator.init(
     tableName: 'collaborators',
     underscored: true,
     timestamps: false,
+    indexes: [
+      {
+        unique: true,
+        fields: ['noteId', 'userId'],
+      },
+    ],
   },
 );

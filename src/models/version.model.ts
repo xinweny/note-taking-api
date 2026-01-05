@@ -55,5 +55,11 @@ Version.init(
     underscored: true,
     timestamps: true,
     updatedAt: false, // disable update
+    indexes: [
+      {
+        unique: true,
+        fields: ['noteId', 'userId'],
+      },
+    ],
   },
 );
