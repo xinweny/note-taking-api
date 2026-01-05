@@ -1,12 +1,14 @@
 import { type Request, type Response } from 'express';
 
-import { Collaborator } from '../models/index.ts';
+import {
+  getCollaboratorsByNoteId,
+  updateCollaboratorPermissions,
+  deleteCollaboratorById,
+} from '../services/collaborator.service.ts';
 
 // Get all collaborators of a note
 export async function getNoteCollaborators(req: Request, res: Response) {
-  const collaborators = await Collaborator.findAll({
-    where: { noteId: +req.params.noteId! }
-  });
+  const collaborators = await getCollaboratorsByNoteId(+req.params.noteId!);
 
   return res.status(200).json({
     data: collaborators,
@@ -15,25 +17,18 @@ export async function getNoteCollaborators(req: Request, res: Response) {
 
 // Update collaborator permissions
 export async function updateCollaborator(req: Request, res: Response) {
-  const canEdit = !!req.body.canEdit;
-
-  await Collaborator.update(
-    { canEdit },
-    {
-      where: { id: +req.params.collaboratorId! }
-    }
-  );
+  const collaborator = await updateCollaboratorPermissions(+req.params.collaboratorId!, {
+    canEdit: !!req.body.canEdit,
+  });
 
   return res.status(200).json({
-    message: 'Collaborator permissions updated successfully.',
+    data: collaborator,
   });
 }
 
 // Delete collaborator from note
 export async function deleteCollaborator(req: Request, res: Response) {
-  await Collaborator.destroy({
-    where: { id: +req.params.collaboratorId! },
-  });
+  await deleteCollaboratorById(+req.params.collaboratorId!);
 
   return res.status(200).json({
     message: 'Collaborator deleted successfully.'

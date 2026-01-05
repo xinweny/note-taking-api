@@ -17,13 +17,13 @@ import {
 
 export const noteRouter = Router();
 
+noteRouter.post('/', createNote);
+
 noteRouter.get('/', [
   authorize(),
   checkCache((req: Request) => `notes:${req.user!.id}.userId`),
   getAllNotes,
 ]);
-
-noteRouter.post('/', createNote);
 
 noteRouter.use('/:noteId/collaborators', collaboratorRouter);
 noteRouter.use('/:noteId/versions', versionRouter);

@@ -3,14 +3,14 @@ import { type Request, type Response } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt, { type JwtUserPayload } from 'jsonwebtoken';
 
-import { User } from '../models/index.ts';
-
 import {
   generateAccessToken,
   generateRefreshToken,
 } from '../utils/auth.util.ts';
 
-export async function createUser(req: Request, res: Response) {
+import { createUser, getUserByEmail } from '../services/user.service.ts';
+
+export async function signupUser(req: Request, res: Response) {
   const {
     username,
     email,
@@ -19,23 +19,21 @@ export async function createUser(req: Request, res: Response) {
 
   const hashedPassword = await bcrypt.hash(password, 12);
 
-  await User.create({
+  const user = await createUser({
     username,
     email,
     password: hashedPassword,
   });
 
   return res.status(200).json({
-    message: 'User created successfully.',
+    data: user,
   });
 }
 
 export async function loginUser(req: Request, res: Response) {
   const { email, password } = req.body;
 
-  const user = await User.findOne({
-    where: { email },
-  });
+  const user = await getUserByEmail(email);
 
   const isPasswordMatch = user
     ? await bcrypt.compare(password, user.password)

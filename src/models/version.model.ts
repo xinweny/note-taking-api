@@ -1,6 +1,7 @@
 import {
   Model,
   DataTypes,
+  UUIDV4,
   type InferAttributes,
   type InferCreationAttributes,
   type CreationOptional,
@@ -17,7 +18,7 @@ export class Version extends Model<
   InferAttributes<Version>,
   InferCreationAttributes<Version>
 > {
-  declare id: CreationOptional<number>;
+  declare id: CreationOptional<string>;
   declare body: string;
   declare noteId: ForeignKey<Note['id']>;
   declare userId: ForeignKey<User['id']>;
@@ -41,8 +42,8 @@ export class Version extends Model<
 Version.init(
   {
     id: {
-      type: DataTypes.INTEGER,
-      autoIncrement: true,
+      type: DataTypes.UUID,
+      defaultValue: UUIDV4,
       primaryKey: true,
     },
     body: { type: DataTypes.TEXT, allowNull: false },

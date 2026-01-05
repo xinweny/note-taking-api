@@ -20,6 +20,7 @@ export class User extends Model<
   declare username: string;
   declare email: string;
   declare password: string;
+  declare createdAt?: CreationOptional<Date>;
 
   declare versions?: NonAttribute<Version[]>;
   declare collaborators?: NonAttribute<Collaborator[]>;
@@ -60,5 +61,15 @@ User.init(
     sequelize,
     tableName: 'users',
     underscored: true,
+    indexes: [
+      {
+        unique: true,
+        fields: ['email'],
+      },
+      {
+        unique: true,
+        fields: ['username'],
+      }
+    ]
   }
 );
