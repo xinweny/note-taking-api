@@ -7,7 +7,9 @@ import { noteRouter } from './note.route.ts';
 
 export const router = Router();
 
-router.get('/', (req, res) => res.send('Note Taking API'));
+router.get('/', (req, res) => {
+  res.send('Note Taking API');
+});
 
 router.use('/auth', authRouter);
 

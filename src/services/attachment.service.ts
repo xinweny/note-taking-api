@@ -3,6 +3,8 @@ import { PutObjectCommand, DeleteObjectCommand } from '@aws-sdk/client-s3';
 
 import { s3 } from '../config/aws.config.ts';
 
+import { NotFoundError } from '../errors/not-found-error.ts';
+
 import { Attachment } from '../models/index.ts';
 
 // Get all attachments associated with a note
@@ -19,41 +21,37 @@ export async function uploadAttachmentToS3(
   file: Express.Multer.File,
   noteId: number,
 ) {
-  try {
-    // Generate a unique file name
-    const fileKey = `uploads/${uuidv4()}_${file.originalname}`;
+  // Generate a unique file name
+  const fileKey = `uploads/${uuidv4()}_${file.originalname}`;
 
-    // Upload parameters for AWS S3
-    const uploadParams = {
-      Bucket: process.env.AWS_S3_BUCKET_NAME,
-      Key: fileKey,
-      Body: file.buffer,
-      ContentType: file.mimetype,
-    };
+  // Upload parameters for AWS S3
+  const uploadParams = {
+    Bucket: process.env.AWS_S3_BUCKET_NAME,
+    Key: fileKey,
+    Body: file.buffer,
+    ContentType: file.mimetype,
+  };
 
-    // Upload file to S3
-    await s3.send(new PutObjectCommand(uploadParams));
+  // Upload file to S3
+  await s3.send(new PutObjectCommand(uploadParams));
 
-    // Construct the CloudFront URL
-    const fileUrl = `${process.env.CLOUDFRONT_URL}/${fileKey}`;
+  // Construct the CloudFront URL
+  const fileUrl = `${process.env.CLOUDFRONT_URL}/${fileKey}`;
 
-    // Save attachment to database
-    const attachment = await Attachment.create({
-      noteId,
-      url: fileUrl,
-    });
+  // Save attachment to database
+  const attachment = await Attachment.create({
+    noteId,
+    url: fileUrl,
+  });
 
-    return attachment;
-  } catch (error) {
-    throw new Error(error as any);
-  }
+  return attachment;
 }
 
 // Remove attachment
 export async function deleteAttachmentById(attachmentId: number) {
   const attachment = await Attachment.findByPk(attachmentId);
 
-  if (!attachment) throw new Error();
+  if (!attachment) throw new NotFoundError();
 
   const deleteParams = {
     Bucket: process.env.AWS_S3_BUCKET,

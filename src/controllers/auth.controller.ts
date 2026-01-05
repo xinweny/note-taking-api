@@ -8,6 +8,8 @@ import {
   generateRefreshToken,
 } from '../utils/auth.util.ts';
 
+import { AuthenticationError } from '../errors/authentication-error.ts';
+
 import { createUser, getUserByEmail } from '../services/user.service.ts';
 
 export async function signupUser(req: Request, res: Response) {
@@ -35,10 +37,7 @@ export async function loginUser(req: Request, res: Response) {
     ? await bcrypt.compare(password, user.password)
     : false;
 
-  if (!isPasswordMatch)
-    return res.status(401).json({
-      message: 'User not found.',
-    });
+  if (!isPasswordMatch) throw new AuthenticationError();
 
   const accessToken = generateAccessToken(user!.id);
   const refreshToken = generateRefreshToken(user!.id);
@@ -57,19 +56,15 @@ export async function loginUser(req: Request, res: Response) {
 export async function refreshAccessToken(req: Request, res: Response) {
   const refreshToken: string | undefined = req.cookies?.jwt;
 
-  if (!refreshToken) return res.status(401).json({ message: 'Unauthorized' });
+  if (!refreshToken) throw new AuthenticationError();
 
-  try {
-    const payload = jwt.verify(
-      refreshToken,
-      process.env.JWT_REFRESH_TOKEN_SECRET,
-    ) as JwtUserPayload;
+  const payload = jwt.verify(
+    refreshToken,
+    process.env.JWT_REFRESH_TOKEN_SECRET,
+  ) as JwtUserPayload;
 
-    // Generate new access token
-    const accessToken = generateAccessToken(payload.id);
+  // Generate new access token
+  const accessToken = generateAccessToken(payload.id);
 
-    return res.status(200).json({ data: { accessToken } });
-  } catch (err) {
-    return res.status(401).json({ message: 'Unauthorized' });
-  }
+  return res.status(200).json({ data: { accessToken } });
 }

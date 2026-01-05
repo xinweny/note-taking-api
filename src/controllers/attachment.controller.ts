@@ -1,5 +1,7 @@
 import { type Request, type Response } from 'express';
 
+import { BadRequestError } from '../errors/bad-request-error.ts';
+
 import {
   getAttachmentsByNoteId,
   uploadAttachmentToS3,
@@ -17,21 +19,15 @@ export async function getAttachments(req: Request, res: Response) {
 
 // Upload attachment to AWS S3
 export async function uploadAttachment(req: Request, res: Response) {
-  try {
-    const file = req.file;
+  const file = req.file;
 
-    if (!file) throw new Error();
+  if (!file) throw new BadRequestError();
 
-    const attachment = await uploadAttachmentToS3(file, +req.params.noteId!);
+  const attachment = await uploadAttachmentToS3(file, +req.params.noteId!);
 
-    return res.status(200).json({
-      data: attachment,
-    });
-  } catch (error) {
-    console.error('Error uploading file:', error);
-
-    return res.status(500).json({ message: 'File upload failed.' });
-  }
+  return res.status(200).json({
+    data: attachment,
+  });
 }
 
 // Remove attachment

@@ -20,7 +20,6 @@ if (process.env.NODE_ENV === 'development') {
     console.log('Database synchronization complete.');
   } catch (error) {
     console.error('Unable to sync to database:', error);
-    process.exit(1);
   }
 }
 

@@ -2,6 +2,8 @@ import { QueryTypes, type InferCreationAttributes } from 'sequelize';
 
 import { sequelize } from '../config/db.config.ts';
 
+import { NotFoundError } from '../errors/not-found-error.ts';
+
 import { Note, Collaborator, Version } from '../models/index.ts';
 
 // Create note with first version
@@ -134,17 +136,13 @@ export async function updateUserNote(
 ) {
   const { body, title } = params;
 
-  try {
-    await Note.update({ title, body }, { where: { id: noteId } });
-  } catch (err) {
-    // Catch error due to concurrent updates by optimistic locking (version=true)
-    throw new Error();
-  }
+  // Prevent concurrent updates by optimistic locking (version=true) in model definition
+  await Note.update({ title, body }, { where: { id: noteId } });
 
   // Retrieve updated note
   const note = await Note.findByPk(noteId);
 
-  if (!note) throw new Error();
+  if (!note) throw new NotFoundError();
 
   // Create new version and save
   await Version.create({

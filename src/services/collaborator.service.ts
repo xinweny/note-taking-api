@@ -1,5 +1,7 @@
 import { type InferAttributes } from 'sequelize';
 
+import { NotFoundError } from '../errors/not-found-error.ts';
+
 import { Collaborator } from '../models/index.ts';
 
 // Get all collaborators of a note
@@ -25,7 +27,7 @@ export async function updateCollaboratorPermissions(
 ) {
   const collaborator = await Collaborator.findByPk(collaboratorId);
 
-  if (!collaborator) throw new Error();
+  if (!collaborator) throw new NotFoundError();
 
   collaborator.set(params);
 
