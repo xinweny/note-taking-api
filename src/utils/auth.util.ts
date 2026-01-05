@@ -1,17 +1,17 @@
 import jwt from 'jsonwebtoken';
 
-export function generateAccessToken(id: number) {
+export function generateAccessToken(userId: number) {
   return jwt.sign(
-    { id },
+    { id: userId } as object,
     process.env.JWT_ACCESS_TOKEN_SECRET,
-    { expiresIn: process.env.JWT_ACCESS_TOKEN_EXPIRES_IN }, // in seconds
+    { expiresIn: +process.env.JWT_ACCESS_TOKEN_EXPIRES_IN },
   );
 }
 
-export function generateRefreshToken(id: number) {
+export function generateRefreshToken(userId: number) {
   return jwt.sign(
-    { id },
+    { id: userId } as object,
     process.env.JWT_REFRESH_TOKEN_SECRET,
-    { expiresIn: process.env.JWT_REFRESH_TOKEN_EXPIRES_IN }, // in seconds
+    { expiresIn: +process.env.JWT_REFRESH_TOKEN_EXPIRES_IN },
   );
 }

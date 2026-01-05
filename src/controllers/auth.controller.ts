@@ -24,7 +24,11 @@ export async function signupUser(req: Request, res: Response) {
   });
 
   return res.status(200).json({
-    data: user,
+    data: {
+      id: user.id,
+      username,
+      email,
+    },
   });
 }
 
