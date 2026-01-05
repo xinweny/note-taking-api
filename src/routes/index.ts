@@ -9,6 +9,5 @@ export const router = Router();
 
 router.use('/auth', authRouter);
 
-// Authenticate all other routes
-router.use(authenticate);
-router.use('/notes', noteRouter);
+// Authenticate note routes
+router.use('/notes', [authenticate, noteRouter]);
