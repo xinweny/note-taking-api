@@ -6,3 +6,4 @@ build
 .gitignore
 eslint.config.js
 dist
+.vscode
