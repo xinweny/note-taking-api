@@ -1,6 +1,6 @@
 import { type Request, type Response } from 'express';
 
-import { setCache } from '../utils/redis.util.ts';
+import { checkCache, setCache, invalidateCache } from '../utils/redis.util.ts';
 
 import {
   createUserNote,
@@ -27,15 +27,20 @@ export async function createNote(req: Request, res: Response) {
 
 // Retrieve notes associated with the authenticated user (created and shared), and are not soft-deleted
 export async function getAllNotes(req: Request, res: Response) {
-  const query = req.query.search;
-
+  const query = req.query.search || '';
   const userId = req.user!.id;
+
+  const cacheKey = `notes:${req.user!.id}:${query}`;
+
+  const cached = await checkCache(cacheKey);
+
+  if (cached) return res.status(200).json({ data: cached });
 
   const notes = query
     ? await getUserNotesByKeyword(userId, query as string)
     : await getNotesByUserId(userId);
 
-  await setCache(req.cacheKey, notes);
+  await setCache(cacheKey, notes);
 
   return res.status(200).json({
     data: notes,
@@ -44,9 +49,17 @@ export async function getAllNotes(req: Request, res: Response) {
 
 // Get note by ID
 export async function getNoteById(req: Request, res: Response) {
-  const note = await getUserNoteById(+req.params.noteId!);
+  const noteId = +req.params.noteId!;
 
-  await setCache(req.cacheKey, note);
+  const note = await getUserNoteById(noteId);
+
+  const cacheKey = `note:${noteId}`;
+
+  const cached = await checkCache(cacheKey);
+
+  if (cached) return res.status(200).json({ data: cached });
+
+  await setCache(cacheKey, note);
 
   return res.status(200).json({
     data: note,
@@ -57,10 +70,15 @@ export async function getNoteById(req: Request, res: Response) {
 export async function updateNote(req: Request, res: Response) {
   const { title, body } = req.body;
 
+  const noteId = +req.params.noteId!;
+  const userId = req.user!.id;
+
   const note = await updateUserNote(+req.params.noteId!, req.user!.id, {
     title,
     body,
   });
+
+  await invalidateCache(`notes:${req.user!.id}:userId`);
 
   return res.status(200).json({
     data: note,

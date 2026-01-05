@@ -5,7 +5,6 @@ declare global {
         id: number;
       };
       file?: Express.Multer.File;
-      cacheKey?: string;
     }
   }
 }

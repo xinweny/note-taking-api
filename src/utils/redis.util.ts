@@ -1,5 +1,12 @@
 import { redisClient } from '../config/redis.config.ts';
 
+export async function checkCache(key: string) {
+  const cachedData = await redisClient.get(key);
+
+  // If key is present, retrieve data from cache
+  return cachedData ? JSON.parse(cachedData) : null;
+}
+
 export async function setCache(
   key: string | undefined,
   data: any,
@@ -13,4 +20,8 @@ export async function setCache(
       value: expiresIn,
     },
   });
+}
+
+export async function invalidateCache(key: string) {
+  return redisClient.del(key);
 }

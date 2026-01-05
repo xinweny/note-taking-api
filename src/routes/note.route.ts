@@ -1,7 +1,6 @@
 import { Router, type Request } from 'express';
 
 import { authorize } from '../middlewares/authorize.middleware.ts';
-import { checkCache } from '../middlewares/redis.middleware.ts';
 
 import { collaboratorRouter } from './collaborator.route.ts';
 import { versionRouter } from './version.route.ts';
@@ -19,20 +18,13 @@ export const noteRouter = Router();
 
 noteRouter.post('/', createNote);
 
-noteRouter.get('/', [
-  checkCache((req: Request) => `notes:${req.user!.id}.userId`),
-  getAllNotes,
-]);
+noteRouter.get('/', getAllNotes);
 
 noteRouter.use('/:noteId/collaborators', collaboratorRouter);
 noteRouter.use('/:noteId/versions', versionRouter);
 noteRouter.use('/:noteId/attachments', attachmentRouter);
 
-noteRouter.get('/:noteId', [
-  authorize(),
-  checkCache((req: Request) => `note:${req.params.noteId}:id`),
-  getNoteById,
-]);
+noteRouter.get('/:noteId', [authorize(), getNoteById]);
 
 noteRouter.put('/:noteId', [authorize('canEdit'), updateNote]);
 
