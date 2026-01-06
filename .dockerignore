@@ -7,3 +7,4 @@ build
 eslint.config.js
 dist
 .vscode
+public

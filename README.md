@@ -53,6 +53,8 @@ Once the `app` container is running, the application can be accessed at http://l
 
 ## Database Schema
 
+![Database Schema](./public/db-schema.png 'Database Schema')
+
 ## Technical Analysis
 
 ### Approach
