@@ -65,6 +65,9 @@ export async function getNotesByUserId(userId: number) {
           },
         ],
       },
+      {
+        association: 'attachments',
+      },
     ],
   });
 

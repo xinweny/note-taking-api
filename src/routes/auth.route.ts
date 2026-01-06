@@ -8,8 +8,8 @@ import {
 
 export const authRouter = Router();
 
-authRouter.post('/login', loginUser);
-
 authRouter.post('/signup', signupUser);
+
+authRouter.post('/login', loginUser);
 
 authRouter.post('/refresh', refreshAccessToken);

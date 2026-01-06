@@ -41,7 +41,7 @@ export async function loginUser(req: Request, res: Response) {
     ? await bcrypt.compare(password, user.password)
     : false;
 
-  if (!isPasswordMatch) throw new AuthenticationError();
+  if (!isPasswordMatch) throw new AuthenticationError('User not found.');
 
   const accessToken = generateAccessToken(user!.id);
   const refreshToken = generateRefreshToken(user!.id);
@@ -60,7 +60,8 @@ export async function loginUser(req: Request, res: Response) {
 export async function refreshAccessToken(req: Request, res: Response) {
   const refreshToken: string | undefined = req.cookies?.jwt;
 
-  if (!refreshToken) throw new AuthenticationError();
+  if (!refreshToken)
+    throw new AuthenticationError('Refresh token cookie not found.');
 
   const payload = jwt.verify(
     refreshToken,
