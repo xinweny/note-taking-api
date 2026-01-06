@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { type Response } from 'express';
 import 'dotenv/config';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
@@ -18,10 +18,14 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true })); // Use qs library when true; Use querystring library when false
 app.use(cookieParser());
 
-app.use('/', swagger.serve, swagger.setup(swaggerDoc));
+// API documentation
+app.get('/', (req, res: Response) => {
+  res.redirect('/docs');
+});
+app.use('/docs', swagger.serve, swagger.setup(swaggerDoc));
 
 // App router
-app.use(router);
+app.use('/api', router);
 
 // 404 not found for all other routes
 router.use('/{*path}', (req, res) => {

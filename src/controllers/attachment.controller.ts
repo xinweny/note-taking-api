@@ -23,7 +23,7 @@ export async function uploadAttachment(req: Request, res: Response) {
 
   if (!file) throw new BadRequestError();
 
-  const attachment = await uploadAttachmentToS3(file, +req.query.noteId!);
+  const attachment = await uploadAttachmentToS3(file, +req.body.noteId!);
 
   return res.status(200).json({
     data: attachment,
