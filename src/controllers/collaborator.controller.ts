@@ -8,7 +8,7 @@ import {
 
 // Get all collaborators of a note
 export async function getNoteCollaborators(req: Request, res: Response) {
-  const collaborators = await getCollaboratorsByNoteId(+req.params.noteId!);
+  const collaborators = await getCollaboratorsByNoteId(+req.query.noteId!);
 
   return res.status(200).json({
     data: collaborators,

@@ -11,7 +11,9 @@ export function authorize(
     | null = null,
 ) {
   return async (req: Request, res: Response, next: NextFunction) => {
-    const { noteId } = req.params;
+    const noteId = req.params.noteId || req.query.noteId || req.body.noteId;
+
+    if (!noteId) throw new AuthorizationError();
 
     // Check if authenticated user is a collaborator of the note
     const collaborator = await Collaborator.findOne({

@@ -1,10 +1,6 @@
-import { Router, type Request } from 'express';
+import { Router } from 'express';
 
 import { authorize } from '../middlewares/authorize.middleware.ts';
-
-import { collaboratorRouter } from './collaborator.route.ts';
-import { versionRouter } from './version.route.ts';
-import { attachmentRouter } from './attachment.route.ts';
 
 import {
   createNote,
@@ -19,10 +15,6 @@ export const noteRouter = Router();
 noteRouter.post('/', createNote);
 
 noteRouter.get('/', getAllNotes);
-
-noteRouter.use('/:noteId/collaborators', collaboratorRouter);
-noteRouter.use('/:noteId/versions', versionRouter);
-noteRouter.use('/:noteId/attachments', attachmentRouter);
 
 noteRouter.get('/:noteId', [authorize(), getNoteById]);
 

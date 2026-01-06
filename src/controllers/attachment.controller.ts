@@ -10,7 +10,7 @@ import {
 
 // Get all attachments associated with a note
 export async function getAttachments(req: Request, res: Response) {
-  const attachments = await getAttachmentsByNoteId(+req.params.noteId!);
+  const attachments = await getAttachmentsByNoteId(+req.query.noteId!);
 
   return res.status(200).json({
     data: attachments,
@@ -23,7 +23,7 @@ export async function uploadAttachment(req: Request, res: Response) {
 
   if (!file) throw new BadRequestError();
 
-  const attachment = await uploadAttachmentToS3(file, +req.params.noteId!);
+  const attachment = await uploadAttachmentToS3(file, +req.query.noteId!);
 
   return res.status(200).json({
     data: attachment,

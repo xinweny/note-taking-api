@@ -21,6 +21,7 @@ export class Note extends Model<
   declare title: string;
   declare body: string;
   declare createdAt: CreationOptional<Date>;
+  declare updatedAt: CreationOptional<Date>;
   declare deletedAt: CreationOptional<Date>;
 
   declare versions?: NonAttribute<Version[]>;
@@ -51,14 +52,16 @@ Note.init(
       primaryKey: true,
     },
     title: { type: DataTypes.STRING, allowNull: false },
-    body: { type: DataTypes.TEXT, allowNull: false },
     createdAt: { type: DataTypes.DATE, allowNull: false },
+    updatedAt: { type: DataTypes.DATE },
+    body: { type: DataTypes.TEXT, allowNull: false },
     deletedAt: { type: DataTypes.DATE },
   },
   {
     sequelize,
     tableName: 'notes',
     paranoid: true, // Enables soft-deletion with deleteAt field
+    timestamps: true,
     underscored: true,
     version: true, // Enable optimistic locking to handle concurrency
     indexes: [

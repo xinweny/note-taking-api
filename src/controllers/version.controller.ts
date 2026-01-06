@@ -7,7 +7,7 @@ import {
 
 // Allow users to track changes to a note over time
 export async function getNoteVersions(req: Request, res: Response) {
-  const versions = await getVersionsByNoteId(+req.params.noteId!);
+  const versions = await getVersionsByNoteId(+req.query.noteId!);
 
   return res.status(200).json({
     data: versions,

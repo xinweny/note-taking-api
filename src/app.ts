@@ -2,6 +2,9 @@ import express from 'express';
 import 'dotenv/config';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
+import swagger from 'swagger-ui-express';
+
+import swaggerDoc from '../swagger.json' with { type: 'json' };
 
 import { errorHandler } from './middlewares/error.middleware.ts';
 
@@ -15,9 +18,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true })); // Use qs library when true; Use querystring library when false
 app.use(cookieParser());
 
-router.get('/', (req, res) => {
-  return res.status(200).json('Note Taking API');
-});
+app.use('/', swagger.serve, swagger.setup(swaggerDoc));
 
 // App router
 app.use(router);

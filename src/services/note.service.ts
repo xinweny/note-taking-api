@@ -11,7 +11,7 @@ export async function createUserNote(
   userId: number,
   params: InferCreationAttributes<
     Note,
-    { omit: 'id' | 'createdAt' | 'deletedAt' }
+    { omit: 'id' | 'createdAt' | 'updatedAt' | 'deletedAt' }
   >,
 ) {
   const note = await Note.create(params);
@@ -33,13 +33,7 @@ export async function createUserNote(
     }),
   ]);
 
-  return await Note.findByPk(note.id, {
-    include: [
-      {
-        association: 'versions',
-      },
-    ],
-  });
+  return note;
 }
 
 // Retrieve notes associated with the authenticated user (created and shared), and are not soft-deleted
@@ -48,25 +42,7 @@ export async function getNotesByUserId(userId: number) {
     where: { '$collaborators.user_id$': userId },
     include: [
       {
-        association: 'versions',
-        include: [
-          {
-            association: 'user',
-            attributes: ['id', 'username'],
-          },
-        ],
-      },
-      {
         association: 'collaborators',
-        include: [
-          {
-            association: 'user',
-            attributes: ['id', 'username'],
-          },
-        ],
-      },
-      {
-        association: 'attachments',
       },
     ],
   });
@@ -133,7 +109,7 @@ export async function updateUserNote(
   userId: number,
   params: InferCreationAttributes<
     Note,
-    { omit: 'id' | 'createdAt' | 'deletedAt' }
+    { omit: 'id' | 'createdAt' | 'updatedAt' | 'deletedAt' }
   >,
 ) {
   const { body, title } = params;
@@ -151,6 +127,7 @@ export async function updateUserNote(
     noteId: note.id,
     userId,
     body,
+    createdAt: note.updatedAt,
   });
 
   return note;

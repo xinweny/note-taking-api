@@ -20,4 +20,7 @@ attachmentRouter.post('/', [
   uploadAttachment,
 ]);
 
-attachmentRouter.delete('/', [authorize('canEdit'), deleteAttachment]);
+attachmentRouter.delete('/:attachmentId', [
+  authorize('canEdit'),
+  deleteAttachment,
+]);
