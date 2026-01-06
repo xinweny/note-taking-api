@@ -1,0 +1,440 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Note Taking API",
+    "description": "A REST API note-taking application built in modern Javascript (TypeScript), ExpressJS and Sequelize.",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000"
+    }
+  ],
+
+  "paths": {
+    "/auth/signup": {
+      "post": {
+        "tags": ["Authentication"],
+        "summary": "Create user",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "username": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string",
+                    "format": "email"
+                  },
+                  "password": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Created user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "number"
+                    },
+                    "username": {
+                      "type": "string"
+                    },
+                    "email": {
+                      "type": "string",
+                      "format": "email"
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "format": "datetime"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "tags": ["Authentication"],
+        "summary": "Login user",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "format": "email"
+                  },
+                  "password": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Access token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "accessToken": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/refresh": {
+      "post": {
+        "summary": "Refresh access token",
+        "tags": ["Authentication"],
+        "security": [{ "cookieAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Refreshed access token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "accessToken": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/notes": {
+      "get": {
+        "summary": "Get user notes",
+        "tags": ["Notes"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "keyword",
+            "schema": { "type": "string" },
+            "required": false,
+            "description": "String of keyword(s) to be used for full-text search"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of notes",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Note"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create note",
+        "tags": ["Notes"],
+        "security": [{ "cookieAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string"
+                  },
+                  "body": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Created note",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Note"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/notes/{id}": {
+      "get": {
+        "summary": "Get note by ID",
+        "tags": ["Notes"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Note",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Note"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Update note by ID",
+        "tags": ["Notes"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string"
+                  },
+                  "body": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Updated note",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Note"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete note by ID",
+        "tags": ["Notes"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User deleted successfully"
+          }
+        }
+      }
+    },
+    "/versions": {
+      "get": {
+        "summary": "Get note versions",
+        "tags": ["Versions"],
+        "security": [{ "bearerAuth": [] }]
+      }
+    },
+    "/versions/{id}": {
+      "get": {
+        "summary": "Get versions by ID",
+        "tags": ["Versions"],
+        "security": [{ "bearerAuth": [] }]
+      }
+    },
+    "/collaborators": {
+      "get": {
+        "summary": "Get note collaborators",
+        "tags": ["Collaborators"],
+        "security": [{ "bearerAuth": [] }]
+      }
+    },
+    "/collaborators/{id}": {
+      "put": {
+        "summary": "Update collaborator by ID",
+        "tags": ["Collaborators"],
+        "security": [{ "bearerAuth": [] }]
+      },
+      "delete": {
+        "summary": "Delete collaborator by ID",
+        "tags": ["Collaborators"],
+        "security": [{ "bearerAuth": [] }]
+      }
+    },
+    "/attachments": {
+      "get": {
+        "summary": "Get note attachments",
+        "tags": ["Attachments"],
+        "security": [{ "bearerAuth": [] }]
+      },
+      "post": {
+        "summary": "Upload attachment",
+        "tags": ["Attachments"],
+        "security": [{ "bearerAuth": [] }]
+      }
+    },
+    "/attachments/{id}": {
+      "delete": {
+        "summary": "Delete attachment by ID",
+        "tags": ["Attachments"],
+        "security": [{ "bearerAuth": [] }]
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer"
+      },
+      "cookieAuth": {
+        "name": "jwt",
+        "type": "apiKey",
+        "in": "cookie"
+      }
+    },
+    "schemas": {
+      "Note": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "title": {
+            "type": "string"
+          },
+          "body": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "datetime"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "datetime"
+          }
+        }
+      },
+      "Version": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "userId": {
+            "type": "number"
+          },
+          "noteId": {
+            "type": "number"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "datetime"
+          }
+        }
+      },
+      "Collaborator": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "userId": {
+            "type": "number"
+          },
+          "noteId": {
+            "type": "number"
+          },
+          "isAdmin": {
+            "type": "boolean"
+          },
+          "canEdit": {
+            "type": "boolean"
+          }
+        }
+      },
+      "Attachment": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "noteId": {
+            "type": "number"
+          },
+          "url": {
+            "type": "string",
+            "format": "url"
+          }
+        }
+      }
+    }
+  }
+}

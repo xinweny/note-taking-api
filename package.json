@@ -28,6 +28,7 @@
     "mysql2": "^3.16.0",
     "redis": "^5.10.0",
     "sequelize": "^6.37.7",
+    "swagger-ui-express": "^5.0.1",
     "uuid": "^13.0.0"
   },
   "devDependencies": {
@@ -40,6 +41,7 @@
     "@types/multer": "^2.0.0",
     "@types/node": "^25.0.3",
     "@types/redis": "^4.0.10",
+    "@types/swagger-ui-express": "^4.1.8",
     "@types/uuid": "^10.0.0",
     "@typescript-eslint/eslint-plugin": "^8.51.0",
     "@typescript-eslint/parser": "^8.51.0",
