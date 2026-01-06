@@ -20,7 +20,7 @@ app.use(cookieParser());
 
 // API documentation
 app.get('/', (req, res: Response) => {
-  res.redirect('/docs');
+  return res.redirect('/docs');
 });
 app.use('/docs', swagger.serve, swagger.setup(swaggerDoc));
 

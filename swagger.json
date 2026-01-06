@@ -167,7 +167,7 @@
       "post": {
         "summary": "Create note",
         "tags": ["Notes"],
-        "security": [{ "cookieAuth": [] }],
+        "security": [{ "bearerAuth": [] }],
         "requestBody": {
           "required": true,
           "content": {
