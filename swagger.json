@@ -7,12 +7,12 @@
   },
   "servers": [
     {
-      "url": "http://localhost:3000"
+      "url": "http://localhost:3000/api"
     }
   ],
 
   "paths": {
-    "/api/auth/signup": {
+    "/auth/signup": {
       "post": {
         "tags": ["Authentication"],
         "summary": "Create user",
@@ -47,7 +47,7 @@
                   "type": "object",
                   "properties": {
                     "id": {
-                      "type": "number"
+                      "type": "integer"
                     },
                     "username": {
                       "type": "string"
@@ -68,7 +68,7 @@
         }
       }
     },
-    "/api/auth/login": {
+    "/auth/login": {
       "post": {
         "tags": ["Authentication"],
         "summary": "Login user",
@@ -110,7 +110,7 @@
         }
       }
     },
-    "/api/auth/refresh": {
+    "/auth/refresh": {
       "post": {
         "summary": "Refresh access token",
         "tags": ["Authentication"],
@@ -134,7 +134,7 @@
         }
       }
     },
-    "/api/notes": {
+    "/notes": {
       "get": {
         "summary": "Get user notes",
         "tags": ["Notes"],
@@ -200,7 +200,7 @@
         }
       }
     },
-    "/api/notes/{id}": {
+    "/notes/{id}": {
       "get": {
         "summary": "Get note by ID",
         "tags": ["Notes"],
@@ -289,12 +289,12 @@
         ],
         "responses": {
           "200": {
-            "description": "User deleted successfully"
+            "description": "Note deleted successfully"
           }
         }
       }
     },
-    "/api/versions": {
+    "/versions": {
       "get": {
         "summary": "Get note versions",
         "tags": ["Versions"],
@@ -303,7 +303,7 @@
           {
             "in": "query",
             "name": "noteId",
-            "schema": { "type": "string" },
+            "schema": { "type": "integer" },
             "required": true,
             "description": "Note ID"
           }
@@ -325,7 +325,7 @@
         }
       }
     },
-    "/api/versions/{id}": {
+    "/versions/{id}": {
       "get": {
         "summary": "Get versions by ID",
         "tags": ["Versions"],
@@ -354,7 +354,7 @@
         }
       }
     },
-    "/api/collaborators": {
+    "/collaborators": {
       "get": {
         "summary": "Get note collaborators",
         "tags": ["Collaborators"],
@@ -363,7 +363,7 @@
           {
             "in": "query",
             "name": "noteId",
-            "schema": { "type": "string" },
+            "schema": { "type": "integer" },
             "required": true,
             "description": "Note ID"
           }
@@ -385,35 +385,157 @@
         }
       }
     },
-    "/api/collaborators/{id}": {
+    "/collaborators/{id}": {
       "put": {
         "summary": "Update collaborator by ID",
         "tags": ["Collaborators"],
-        "security": [{ "bearerAuth": [] }]
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "canEdit": {
+                    "type": "boolean"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Updated collaborator",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Collaborator"
+                }
+              }
+            }
+          }
+        }
       },
       "delete": {
         "summary": "Delete collaborator by ID",
         "tags": ["Collaborators"],
-        "security": [{ "bearerAuth": [] }]
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Collaborator deleted successfully"
+          }
+        }
       }
     },
     "/attachments": {
       "get": {
         "summary": "Get note attachments",
         "tags": ["Attachments"],
-        "security": [{ "bearerAuth": [] }]
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "noteId",
+            "schema": { "type": "integer" },
+            "required": true,
+            "description": "Note ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of note attachments",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Attachment"
+                  }
+                }
+              }
+            }
+          }
+        }
       },
       "post": {
         "summary": "Upload attachment",
         "tags": ["Attachments"],
-        "security": [{ "bearerAuth": [] }]
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "noteId": {
+                    "type": "integer"
+                  },
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Created attachment",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Attachment"
+                }
+              }
+            }
+          }
+        }
       }
     },
-    "/api/attachments/{id}": {
+    "/attachments/{id}": {
       "delete": {
         "summary": "Delete attachment by ID",
         "tags": ["Attachments"],
-        "security": [{ "bearerAuth": [] }]
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Attachment deleted successfully"
+          }
+        }
       }
     }
   },
@@ -434,7 +556,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "number"
+            "type": "integer"
           },
           "title": {
             "type": "string"
@@ -459,10 +581,10 @@
             "type": "string"
           },
           "userId": {
-            "type": "number"
+            "type": "integer"
           },
           "noteId": {
-            "type": "number"
+            "type": "integer"
           },
           "createdAt": {
             "type": "string",
@@ -474,13 +596,13 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "number"
+            "type": "integer"
           },
           "userId": {
-            "type": "number"
+            "type": "integer"
           },
           "noteId": {
-            "type": "number"
+            "type": "integer"
           },
           "isAdmin": {
             "type": "boolean"
@@ -494,10 +616,10 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "number"
+            "type": "integer"
           },
           "noteId": {
-            "type": "number"
+            "type": "integer"
           },
           "url": {
             "type": "string",
